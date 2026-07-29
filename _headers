@@ -4,8 +4,19 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   X-Frame-Options: SAMEORIGIN
 
-/index.html
+/*.html
+  Content-Type: text/html; charset=utf-8
   Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Content-Type: text/html; charset=utf-8
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.css
+  Content-Type: text/css; charset=utf-8
+
+/*.js
+  Content-Type: text/javascript; charset=utf-8
 
 /css/*
   Cache-Control: public, max-age=31536000, immutable

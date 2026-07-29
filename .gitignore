@@ -11,3 +11,16 @@ tmp/
 assets/previews/
 .preview-tools/
 _*.txt
+
+# Local-only ops docs and credentials (never commit)
+XOLOme 官网运维手册.md
+DEPLOYMENT.md
+*.local.md
+
+# Local rematte / QA scratch (never commit)
+tools/_qa/
+tools/__pycache__/
+tools/_enc_*.txt
+assets/images/_edge-*
+assets/images/_split-*
+assets/images/_src-*

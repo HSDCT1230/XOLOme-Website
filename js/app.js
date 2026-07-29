@@ -4,7 +4,9 @@ const nav = document.querySelector("[data-nav]");
 const contactDialog = document.querySelector("[data-contact-dialog]");
 const contactOpeners = document.querySelectorAll("[data-contact-open]");
 const contactCloser = document.querySelector("[data-contact-close]");
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const reduceMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+).matches;
 let lastDialogTrigger = null;
 let scrollAnimFrame = 0;
 /** True while a click/hash scroll is animating — skip reveal resets to avoid flicker. */
@@ -69,7 +71,10 @@ pinEntryToHome();
 
 function updateViewportHeight() {
   const viewportHeight = window.visualViewport?.height || window.innerHeight;
-  document.documentElement.style.setProperty("--xo-live-viewport", `${Math.round(viewportHeight)}px`);
+  document.documentElement.style.setProperty(
+    "--xo-live-viewport",
+    `${Math.round(viewportHeight)}px`,
+  );
 }
 
 function updateHeader() {
@@ -78,7 +83,9 @@ function updateHeader() {
 
 function updateBodyLock() {
   document.body.style.overflow =
-    header.classList.contains("menu-open") || contactDialog.open ? "hidden" : "";
+    header.classList.contains("menu-open") || contactDialog.open
+      ? "hidden"
+      : "";
 }
 
 function setMenuToggleLabel(isOpen) {
@@ -119,9 +126,13 @@ function openContact(trigger) {
 }
 
 function getAnchorOffset() {
-  const scrollPaddingTop = Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);
+  const scrollPaddingTop = Number.parseFloat(
+    getComputedStyle(document.documentElement).scrollPaddingTop,
+  );
   const fallback = header.getBoundingClientRect().height;
-  return Number.isFinite(scrollPaddingTop) ? scrollPaddingTop : Math.max(0, fallback);
+  return Number.isFinite(scrollPaddingTop)
+    ? scrollPaddingTop
+    : Math.max(0, fallback);
 }
 
 function easeInOutQuint(t) {
@@ -172,7 +183,10 @@ function animateScrollTo(top, onComplete) {
 
   const step = (now) => {
     const progress = Math.min(1, (now - startTime) / duration);
-    window.scrollTo({ top: start + delta * easeInOutQuint(progress), behavior: "auto" });
+    window.scrollTo({
+      top: start + delta * easeInOutQuint(progress),
+      behavior: "auto",
+    });
     if (progress < 1) {
       scrollAnimFrame = window.requestAnimationFrame(step);
       return;
@@ -219,11 +233,15 @@ function isFullyOffscreen(el) {
 }
 
 function resetOffscreenReveals() {
-  document.querySelectorAll("[data-reveal].is-revealed, [data-reveal].is-reveal-warming").forEach((el) => {
-    if (isFullyOffscreen(el)) {
-      resetReveal(el);
-    }
-  });
+  document
+    .querySelectorAll(
+      "[data-reveal].is-revealed, [data-reveal].is-reveal-warming",
+    )
+    .forEach((el) => {
+      if (isFullyOffscreen(el)) {
+        resetReveal(el);
+      }
+    });
 }
 
 function markRevealed(el) {
@@ -259,7 +277,11 @@ function scrollToHash(hash, options = {}) {
           history.replaceState(null, "", hash);
         }
       } else {
-        history.replaceState(null, "", `${location.pathname}${location.search}`);
+        history.replaceState(
+          null,
+          "",
+          `${location.pathname}${location.search}`,
+        );
       }
     }
     return;
@@ -281,7 +303,10 @@ function scrollToHash(hash, options = {}) {
   if (target.dataset.scrollAlign === "media" && window.innerWidth > 960) {
     const availableHeight = Math.max(0, window.innerHeight - anchorOffset);
     const visibleTargetHeight = Math.min(targetRect.height, availableHeight);
-    const centerOffset = Math.max(0, (availableHeight - visibleTargetHeight) / 2);
+    const centerOffset = Math.max(
+      0,
+      (availableHeight - visibleTargetHeight) / 2,
+    );
     desiredTop -= centerOffset;
   }
 
@@ -311,13 +336,15 @@ function initSectionReveals() {
     [".x1-band > .section-head", "copy", 0],
     [".x1-stage__copy", "copy", 80],
     [".x1-stage__media .tile", "media", 0],
+    [".x1-companion__copy", "copy", 0],
+    [".x1-companion__shot", "media", 80],
     [".collab-band > .section-head", "copy", 0],
     [".collab-stage__copy", "copy", 70],
     [".collab-stage__media", "media", 140],
     [".expo-gallery__item", "media", 0],
     [".collab-band__footer", "soft", 60],
     [".about-stage__copy", "copy", 0],
-    [".about-stage__aside", "media", 110],
+    [".about-stage__character", "media", 110],
     [".contact-band__copy", "copy", 0],
     [".contact-band__aside", "media", 100],
   ];
@@ -354,7 +381,10 @@ function initSectionReveals() {
         return;
       }
       entries.forEach((entry) => {
-        if (!entry.isIntersecting || entry.target.classList.contains("is-revealed")) {
+        if (
+          !entry.isIntersecting ||
+          entry.target.classList.contains("is-revealed")
+        ) {
           return;
         }
         entry.target.classList.add("is-reveal-warming");
@@ -371,7 +401,10 @@ function initSectionReveals() {
       entries.forEach((entry) => {
         const el = entry.target;
         if (entry.isIntersecting) {
-          if (entry.intersectionRatio < 0.16 || el.classList.contains("is-revealed")) {
+          if (
+            entry.intersectionRatio < 0.16 ||
+            el.classList.contains("is-revealed")
+          ) {
             return;
           }
           el.classList.add("is-reveal-warming");
@@ -381,7 +414,8 @@ function initSectionReveals() {
 
         // Only reset when fully off-screen — avoids mid-viewport opacity flashes.
         if (
-          (el.classList.contains("is-revealed") || el.classList.contains("is-reveal-warming")) &&
+          (el.classList.contains("is-revealed") ||
+            el.classList.contains("is-reveal-warming")) &&
           isFullyOffscreen(el)
         ) {
           resetReveal(el);
@@ -398,9 +432,15 @@ function initSectionReveals() {
 }
 
 window.addEventListener("wheel", requestUserCancelScroll, { passive: true });
-window.addEventListener("touchmove", requestUserCancelScroll, { passive: true });
+window.addEventListener("touchmove", requestUserCancelScroll, {
+  passive: true,
+});
 window.addEventListener("keydown", (event) => {
-  if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) {
+  if (
+    ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(
+      event.key,
+    )
+  ) {
     requestUserCancelScroll();
   }
   if (event.key === "Escape" && header.classList.contains("menu-open")) {
@@ -418,7 +458,10 @@ menuButton.addEventListener("click", () => {
 });
 
 document.addEventListener("click", (event) => {
-  if (header.classList.contains("menu-open") && !header.contains(event.target)) {
+  if (
+    header.classList.contains("menu-open") &&
+    !header.contains(event.target)
+  ) {
     closeMenu();
   }
 });
@@ -445,16 +488,23 @@ window.addEventListener("popstate", () => {
   entryPinning = false;
   cancelEntryTopTimers();
   const hash = getLocationHash() || "#top";
-  scrollToHash(hash, { updateHistory: false, instant: Math.abs(window.scrollY) < 8 });
+  scrollToHash(hash, {
+    updateHistory: false,
+    instant: Math.abs(window.scrollY) < 8,
+  });
 });
 
-window.addEventListener("scroll", () => {
-  if (entryPinning) {
-    forceScrollTop();
-    return;
-  }
-  updateHeader();
-}, { passive: true });
+window.addEventListener(
+  "scroll",
+  () => {
+    if (entryPinning) {
+      forceScrollTop();
+      return;
+    }
+    updateHeader();
+  },
+  { passive: true },
+);
 
 window.addEventListener("resize", () => {
   updateViewportHeight();
@@ -462,8 +512,12 @@ window.addEventListener("resize", () => {
     closeMenu();
   }
 });
-window.visualViewport?.addEventListener("resize", updateViewportHeight, { passive: true });
-window.addEventListener("orientationchange", updateViewportHeight, { passive: true });
+window.visualViewport?.addEventListener("resize", updateViewportHeight, {
+  passive: true,
+});
+window.addEventListener("orientationchange", updateViewportHeight, {
+  passive: true,
+});
 updateViewportHeight();
 updateHeader();
 setMenuToggleLabel(false);
@@ -520,7 +574,9 @@ function hydrateLazyImage(el) {
 }
 
 function initLazyImages() {
-  const nodes = document.querySelectorAll("img[data-lazy-src], img[data-lazy-srcset]");
+  const nodes = document.querySelectorAll(
+    "img[data-lazy-src], img[data-lazy-srcset]",
+  );
   if (!nodes.length) {
     return;
   }
@@ -528,7 +584,9 @@ function initLazyImages() {
   const reveal = (el) => {
     const picture = el.closest("picture");
     if (picture) {
-      picture.querySelectorAll("[data-lazy-src], [data-lazy-srcset]").forEach(hydrateLazyImage);
+      picture
+        .querySelectorAll("[data-lazy-src], [data-lazy-srcset]")
+        .forEach(hydrateLazyImage);
       return;
     }
     hydrateLazyImage(el);
@@ -567,7 +625,9 @@ function loadLazyVideo(video) {
     video.play().catch(() => {});
   }
 
-  const poster = video.parentElement?.querySelector(".hero__poster");
+  const poster = video.parentElement?.querySelector(
+    ".hero__poster, .feature-reel__poster",
+  );
   if (poster) {
     const hidePoster = () => poster.classList.add("is-hidden");
     video.addEventListener("playing", hidePoster, { once: true });
@@ -581,8 +641,12 @@ function initLazyVideos() {
     return;
   }
 
-  const deferred = videos.filter((video) => video.hasAttribute("data-lazy-video-defer"));
-  const immediate = videos.filter((video) => !video.hasAttribute("data-lazy-video-defer"));
+  const deferred = videos.filter((video) =>
+    video.hasAttribute("data-lazy-video-defer"),
+  );
+  const immediate = videos.filter(
+    (video) => !video.hasAttribute("data-lazy-video-defer"),
+  );
 
   const observeVideos = (list, rootMargin) => {
     if (!list.length) {
@@ -638,7 +702,9 @@ function initLazyVideos() {
 
 initLazyImages();
 initLazyVideos();
-initAboutGallery();
+initCompanionGallery();
+initIpShells();
+initExpoLightbox();
 
 if (reduceMotion) {
   document.querySelectorAll("video").forEach((video) => {
@@ -649,18 +715,134 @@ if (reduceMotion) {
 
 initSectionReveals();
 
-function initAboutGallery() {
-  const root = document.querySelector("[data-about-gallery]");
+function initExpoLightbox() {
+  const dialog = document.querySelector("[data-expo-lightbox]");
+  const items = Array.from(
+    document.querySelectorAll("[data-expo-lightbox-item]"),
+  );
+  if (!dialog || !items.length) {
+    return;
+  }
+
+  const imageEl = dialog.querySelector("[data-expo-lightbox-image]");
+  const captionEl = dialog.querySelector("[data-expo-lightbox-caption]");
+  const closeBtn = dialog.querySelector("[data-expo-lightbox-close]");
+  const prevBtn = dialog.querySelector("[data-expo-lightbox-prev]");
+  const nextBtn = dialog.querySelector("[data-expo-lightbox-next]");
+  let index = 0;
+
+  const resolveSrc = (img) => {
+    if (!img) {
+      return "";
+    }
+    if (img.dataset.lazySrc) {
+      return img.dataset.lazySrc;
+    }
+    if (img.currentSrc && !img.currentSrc.startsWith("data:")) {
+      return img.currentSrc;
+    }
+    const src = img.getAttribute("src") || "";
+    return src.startsWith("data:") ? "" : src;
+  };
+
+  const render = () => {
+    const item = items[index];
+    const img = item?.querySelector("img");
+    const caption = item?.querySelector("figcaption");
+    const src = resolveSrc(img);
+    if (src) {
+      imageEl.src = src;
+    }
+    imageEl.alt = img?.alt || "";
+    if (caption) {
+      const label = caption.querySelector("span")?.textContent?.trim() || "";
+      const title = caption.querySelector("strong")?.textContent?.trim() || "";
+      captionEl.replaceChildren();
+      if (label) {
+        const span = document.createElement("span");
+        span.textContent = label;
+        captionEl.appendChild(span);
+      }
+      if (title) {
+        const strong = document.createElement("strong");
+        strong.textContent = title;
+        captionEl.appendChild(strong);
+      }
+    } else {
+      captionEl.replaceChildren();
+    }
+    prevBtn.hidden = items.length < 2;
+    nextBtn.hidden = items.length < 2;
+  };
+
+  const openAt = (i) => {
+    index = (i + items.length) % items.length;
+    render();
+    if (!dialog.open) {
+      dialog.showModal();
+    }
+  };
+
+  const close = () => {
+    if (dialog.open) {
+      dialog.close();
+    }
+  };
+
+  items.forEach((item, i) => {
+    item.addEventListener("click", () => openAt(i));
+    item.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openAt(i);
+      }
+    });
+  });
+
+  closeBtn?.addEventListener("click", close);
+  prevBtn?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    openAt(index - 1);
+  });
+  nextBtn?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    openAt(index + 1);
+  });
+
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) {
+      close();
+    }
+  });
+
+  dialog.addEventListener("keydown", (event) => {
+    if (!dialog.open) {
+      return;
+    }
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      openAt(index - 1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      openAt(index + 1);
+    }
+  });
+}
+
+function initCompanionGallery() {
+  const root = document.querySelector("[data-companion-gallery]");
   if (!root) {
     return;
   }
 
-  const track = root.querySelector("[data-about-gallery-track]");
-  const frame = root.querySelector(".about-stage__gallery-frame");
-  const slides = Array.from(root.querySelectorAll("[data-about-gallery-slide]"));
-  const prevBtn = root.querySelector("[data-about-gallery-prev]");
-  const nextBtn = root.querySelector("[data-about-gallery-next]");
-  const dotsWrap = root.querySelector("[data-about-gallery-dots]");
+  const track = root.querySelector("[data-companion-gallery-track]");
+  const frame = root.querySelector(".x1-companion__carousel-frame");
+  const slides = Array.from(
+    root.querySelectorAll("[data-companion-gallery-slide]"),
+  );
+  const prevBtn = root.querySelector("[data-companion-gallery-prev]");
+  const nextBtn = root.querySelector("[data-companion-gallery-next]");
+  const dotsWrap = root.querySelector("[data-companion-gallery-dots]");
   if (!track || !frame || !dotsWrap || slides.length < 2) {
     return;
   }
@@ -673,12 +855,16 @@ function initAboutGallery() {
   let dragStartX = 0;
   let dragDelta = 0;
   let dragging = false;
-  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const finePointer = window.matchMedia(
+    "(hover: hover) and (pointer: fine)",
+  ).matches;
 
   const hydrateGallery = () => {
-    root.querySelectorAll("img[data-lazy-src], source[data-lazy-srcset]").forEach((el) => {
-      hydrateLazyImage(el);
-    });
+    root
+      .querySelectorAll("img[data-lazy-src], source[data-lazy-srcset]")
+      .forEach((el) => {
+        hydrateLazyImage(el);
+      });
   };
 
   if ("IntersectionObserver" in window) {
@@ -700,11 +886,13 @@ function initAboutGallery() {
   dotsWrap.innerHTML = slides
     .map(
       (_, i) =>
-        `<button type="button" class="about-stage__gallery-dot${i === 0 ? " is-active" : ""}" data-about-gallery-dot="${i}" role="tab" aria-label="场景 ${i + 1}" aria-selected="${i === 0 ? "true" : "false"}"></button>`,
+        `<button type="button" class="x1-companion__carousel-dot${i === 0 ? " is-active" : ""}" data-companion-gallery-dot="${i}" role="tab" aria-label="场景 ${i + 1}" aria-selected="${i === 0 ? "true" : "false"}"></button>`,
     )
     .join("");
 
-  const dots = Array.from(dotsWrap.querySelectorAll("[data-about-gallery-dot]"));
+  const dots = Array.from(
+    dotsWrap.querySelectorAll("[data-companion-gallery-dot]"),
+  );
 
   const render = () => {
     track.style.transform = `translate3d(${-index * 100}%, 0, 0)`;
@@ -755,19 +943,22 @@ function initAboutGallery() {
 
   dots.forEach((dot) => {
     dot.addEventListener("click", () => {
-      goTo(Number(dot.dataset.aboutGalleryDot) || 0);
+      goTo(Number(dot.dataset.companionGalleryDot) || 0);
     });
   });
 
   const onPointerDown = (event) => {
-    // Swipe on touch / coarse pointers only; desktop uses arrows + dots.
     if (finePointer && event.pointerType === "mouse") {
       return;
     }
     if (event.pointerType === "mouse" && event.button !== 0) {
       return;
     }
-    if (event.target.closest(".about-stage__gallery-nav, .about-stage__gallery-dot")) {
+    if (
+      event.target.closest(
+        ".x1-companion__carousel-nav, .x1-companion__carousel-dot",
+      )
+    ) {
       return;
     }
     pointerId = event.pointerId;
@@ -787,12 +978,11 @@ function initAboutGallery() {
     }
     dragDelta = event.clientX - dragStartX;
     const width = frame.getBoundingClientRect().width || 1;
-    const offset = (-index * 100) + (dragDelta / width) * 100;
+    const offset = -index * 100 + (dragDelta / width) * 100;
     track.style.transform = `translate3d(${offset}%, 0, 0)`;
   };
 
   const restoreTrackTransition = () => {
-    // Clear inline override so CSS ease (and prefers-reduced-motion) apply again.
     track.style.transition = "";
   };
 
@@ -845,7 +1035,9 @@ function initAboutGallery() {
   if ("IntersectionObserver" in window) {
     const playObserver = new IntersectionObserver(
       (entries) => {
-        const visible = entries.some((entry) => entry.isIntersecting && entry.intersectionRatio > 0.35);
+        const visible = entries.some(
+          (entry) => entry.isIntersecting && entry.intersectionRatio > 0.35,
+        );
         if (visible) {
           restartAuto();
         } else {
@@ -858,6 +1050,175 @@ function initAboutGallery() {
   } else {
     restartAuto();
   }
+
+  render();
+}
+
+
+function initIpShells() {
+  const root = document.querySelector("[data-ip-shells]");
+  if (!root) {
+    return;
+  }
+
+  const track = root.querySelector("[data-ip-shells-track]");
+  const slides = Array.from(root.querySelectorAll("[data-ip-shells-slide]"));
+  const dotsWrap = root.querySelector("[data-ip-shells-dots]");
+  const viewport = root.querySelector(".ip-shells__viewport");
+  if (!track || !dotsWrap || !viewport || slides.length < 2) {
+    return;
+  }
+
+  const count = slides.length;
+  let index = 0;
+  let pointerId = null;
+  let dragStartX = 0;
+  let dragDelta = 0;
+  let dragging = false;
+
+  const hydrate = () => {
+    root
+      .querySelectorAll("img[data-lazy-src], source[data-lazy-srcset]")
+      .forEach((el) => {
+        hydrateLazyImage(el);
+      });
+  };
+
+  if ("IntersectionObserver" in window) {
+    const warm = new IntersectionObserver(
+      (entries, obs) => {
+        if (!entries.some((entry) => entry.isIntersecting)) {
+          return;
+        }
+        hydrate();
+        obs.disconnect();
+      },
+      { rootMargin: "160px 0px", threshold: 0.01 },
+    );
+    warm.observe(root);
+  } else {
+    hydrate();
+  }
+
+  const labels = slides.map((slide, i) => {
+    const img = slide.querySelector("img");
+    const alt = img && img.getAttribute("alt");
+    return alt && alt.trim() ? alt.trim() : `换壳 ${i + 1}`;
+  });
+
+  dotsWrap.innerHTML = slides
+    .map(
+      (_, i) =>
+        `<button type="button" class="ip-shells__dot${i === 0 ? " is-active" : ""}" data-ip-shells-dot="${i}" role="tab" aria-label="${labels[i]}" aria-selected="${i === 0 ? "true" : "false"}"></button>`,
+    )
+    .join("");
+  const dots = Array.from(dotsWrap.querySelectorAll("[data-ip-shells-dot]"));
+
+  const render = () => {
+    track.style.transform = `translate3d(${-index * 100}%, 0, 0)`;
+    slides.forEach((slide, i) => {
+      const active = i === index;
+      slide.classList.toggle("is-active", active);
+      slide.setAttribute("aria-hidden", active ? "false" : "true");
+    });
+    dots.forEach((dot, i) => {
+      const active = i === index;
+      dot.classList.toggle("is-active", active);
+      dot.setAttribute("aria-selected", active ? "true" : "false");
+    });
+  };
+
+  const goTo = (next) => {
+    index = ((next % count) + count) % count;
+    render();
+  };
+
+  const indexFromClientX = (clientX) => {
+    const rect = viewport.getBoundingClientRect();
+    if (rect.width <= 0) {
+      return index;
+    }
+    const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    return Math.min(count - 1, Math.floor(ratio * count));
+  };
+
+  viewport.addEventListener("pointermove", (event) => {
+    if (dragging) {
+      return;
+    }
+    if (event.pointerType === "touch") {
+      return;
+    }
+    goTo(indexFromClientX(event.clientX));
+  });
+
+  viewport.addEventListener("pointerdown", (event) => {
+    if (pointerId !== null) {
+      return;
+    }
+    pointerId = event.pointerId;
+    dragging = true;
+    dragStartX = event.clientX;
+    dragDelta = 0;
+    viewport.setPointerCapture(pointerId);
+    root.classList.add("is-dragging");
+  });
+
+  viewport.addEventListener("pointermove", (event) => {
+    if (!dragging || event.pointerId !== pointerId) {
+      return;
+    }
+    dragDelta = event.clientX - dragStartX;
+    const offset = -index * 100 + (dragDelta / viewport.clientWidth) * 100;
+    track.style.transition = "none";
+    track.style.transform = `translate3d(${offset}%, 0, 0)`;
+  });
+
+  const endDrag = (event) => {
+    if (!dragging || event.pointerId !== pointerId) {
+      return;
+    }
+    dragging = false;
+    pointerId = null;
+    root.classList.remove("is-dragging");
+    track.style.transition = "";
+    const threshold = Math.max(36, viewport.clientWidth * 0.12);
+    if (dragDelta <= -threshold) {
+      goTo(index + 1);
+    } else if (dragDelta >= threshold) {
+      goTo(index - 1);
+    } else {
+      render();
+    }
+  };
+
+  viewport.addEventListener("pointerup", endDrag);
+  viewport.addEventListener("pointercancel", endDrag);
+
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => {
+      goTo(Number(dot.dataset.ipShellsDot));
+    });
+  });
+
+  viewport.addEventListener(
+    "wheel",
+    (event) => {
+      if (
+        Math.abs(event.deltaX) < Math.abs(event.deltaY) &&
+        Math.abs(event.deltaX) < 2
+      ) {
+        return;
+      }
+      event.preventDefault();
+      if (event.deltaX > 8 || event.deltaY > 8) {
+        goTo(index + 1);
+      } else if (event.deltaX < -8 || event.deltaY < -8) {
+        goTo(index - 1);
+      }
+    },
+    { passive: false },
+  );
 
   render();
 }

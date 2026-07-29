@@ -9,6 +9,13 @@
   --xolo-green-ink: #071006;
   --xo-green: #6ec73b;
   --xo-green-soft: #8de85d;
+  /* Shared page-frame rhythm — every band uses the same vertical scale. */
+  --xo-band-pad-top: clamp(1.25rem, 3.2vh, 2.5rem);
+  --xo-head-margin-top: clamp(1.75rem, 4.5vh, 3.25rem);
+  --xo-head-pad-top: clamp(0.75rem, 2vh, 1.5rem);
+  --xo-head-margin-bottom: clamp(0.85rem, 2vh, 1.35rem);
+  --xo-guide-margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  --xo-shell-max: 1520px;
 }
 
 .button--primary {
@@ -42,7 +49,10 @@ header.masthead .nav .button.button--ghost.button--nav {
   gap: 0.4em;
 }
 
-header.masthead .nav .button.button--ghost.button--nav span[aria-hidden="true"] {
+header.masthead
+  .nav
+  .button.button--ghost.button--nav
+  span[aria-hidden="true"] {
   display: inline;
   width: auto;
   height: auto;
@@ -60,9 +70,18 @@ header.masthead .nav .button.button--ghost.button--nav span[aria-hidden="true"] 
   transform: none;
 }
 
-header.masthead .nav .button.button--ghost.button--nav:hover span[aria-hidden="true"],
-header.masthead .nav .button.button--ghost.button--nav:focus-visible span[aria-hidden="true"],
-header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="true"] {
+header.masthead
+  .nav
+  .button.button--ghost.button--nav:hover
+  span[aria-hidden="true"],
+header.masthead
+  .nav
+  .button.button--ghost.button--nav:focus-visible
+  span[aria-hidden="true"],
+header.masthead
+  .nav
+  .button.button--ghost.button--nav:active
+  span[aria-hidden="true"] {
   color: inherit;
   background: transparent;
   box-shadow: none;
@@ -113,57 +132,136 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
   background: var(--xolo-green);
 }
 
-/* Let the last band flow straight into the footer as one continuous ending:
-   tighter cue spacing, no doubled hairline seam. */
-.contact-band > .section-guide {
-  margin: auto auto clamp(0.75rem, 1.5vw, 1.25rem);
+/* Last band: content + classic footer (logo · address/email · ↑). */
+#contact.contact-band {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  min-height: var(--xo-section-min-height);
+  box-sizing: border-box;
+  padding-bottom: 0;
 }
 
-.footer {
-  padding-bottom: 1.4rem;
+@media (max-width: 960px) {
+  #contact.contact-band {
+    min-height: 0;
+  }
 }
 
-.footer__inner {
-  border-top: 0;
-  padding-top: 0.5rem;
-  gap: 1.4rem;
+.footer.contact-band__footer,
+.contact-band__footer.footer {
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding: clamp(0.55rem, 1.4vh, 1rem) 0 clamp(1.25rem, 2.4vh, 2rem);
+  background: transparent;
 }
 
-.footer__copy {
-  border-top-color: rgba(255, 255, 255, 0.07);
-  padding-right: 0;
+.contact-band__footer .footer__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: clamp(1.35rem, 2.6vh, 1.9rem) 0 1rem;
 }
 
-.footer__meta {
+.contact-band__footer .footer__logo {
   justify-self: start;
-  text-align: left;
-}
-
-.footer__logo {
-  justify-self: end;
   align-self: start;
+  width: min(7.5rem, 32vw);
+  height: auto;
+  opacity: 0.92;
 }
 
-/* Contact: left copy high, right stack = image + CTA — grid align, no transforms. */
+.contact-band__footer .footer__meta {
+  display: grid;
+  justify-self: end;
+  gap: 0.35rem;
+  text-align: right;
+  color: rgba(241, 240, 235, 0.66);
+  font-size: 0.78rem;
+}
+
+.contact-band__footer .footer__meta p {
+  margin: 0;
+}
+
+.contact-band__footer .footer__meta a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact-band__footer .footer__meta a:hover,
+.contact-band__footer .footer__meta a:focus-visible {
+  color: var(--xolo-green-soft, #8de85d);
+}
+
+.contact-band__footer .footer__copy {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-top: 1rem;
+  padding-right: 3.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(241, 240, 235, 0.46);
+  font-size: 0.68rem;
+}
+
+.contact-band__footer .footer__top {
+  position: absolute;
+  right: 0;
+  bottom: 1.1rem;
+  display: grid;
+  width: 2.4rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(246, 246, 240, 0.78);
+  font-size: 1rem;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.contact-band__footer .footer__top:hover,
+.contact-band__footer .footer__top:focus-visible {
+  border-color: var(--xolo-green);
+  color: var(--xolo-green-ink, #071006);
+  background: var(--xolo-green);
+}
+
+/* Contact: title left · product + CTA right. */
 .contact-band__inner {
+  flex: 1 1 auto;
   display: grid;
   grid-template-columns: minmax(14rem, 0.95fr) minmax(18rem, 1.15fr);
   align-items: stretch;
   gap: clamp(1.5rem, 4vw, 3.5rem);
-  min-height: clamp(22rem, 46vh, 32rem);
+  min-height: 0;
   overflow: visible;
   border-top: 0;
   border-bottom: 0;
-  padding-block: clamp(1.75rem, 3.5vh, 2.75rem);
+  padding-block: clamp(1.15rem, 2.8vh, 2.1rem) clamp(0.65rem, 1.6vh, 1.15rem);
 }
 
 .contact-band__copy {
   position: relative;
   z-index: 1;
-  align-self: start;
-  max-width: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  gap: 0;
+  max-width: 34rem;
   min-width: 0;
-  padding-top: clamp(0.25rem, 1vh, 0.75rem);
+  min-height: 100%;
+  padding-top: clamp(0.35rem, 1.2vh, 0.9rem);
+  padding-bottom: clamp(0.35rem, 1.2vh, 0.85rem);
 }
 
 /* Restore original 2-line headline — never character-stack from tiny max-width. */
@@ -186,23 +284,29 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  align-self: end;
+  align-self: stretch;
   gap: clamp(1rem, 2.2vh, 1.6rem);
   min-width: 0;
+  min-height: 100%;
   overflow: visible;
   padding-bottom: clamp(0.35rem, 1vh, 0.85rem);
 }
 
 .contact-band__media {
+  flex: 1 1 auto;
+  display: grid;
+  place-items: center;
   width: 100%;
-  max-width: min(100%, 44rem);
+  max-width: min(100%, 46rem);
   margin: 0;
+  min-height: 0;
 }
 
 .contact-band__media img {
   display: block;
   width: 100%;
   height: auto;
+  max-height: min(40rem, 64vh);
   object-fit: contain;
   filter: drop-shadow(0 1.4rem 2.8rem rgba(0, 0, 0, 0.45));
 }
@@ -210,6 +314,7 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
 .contact-band__action {
   display: flex;
   justify-content: center;
+  flex: 0 0 auto;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -233,6 +338,7 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
 .intro-band__copy h2,
 .section-head h2,
 .about-stage__copy h2,
+.x1-companion__copy h2,
 .collab-stage__copy h3,
 .x1-stage__copy h3 {
   max-width: none;
@@ -246,6 +352,7 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
 .intro-band__copy h2 span,
 .section-head h2 span,
 .about-stage__copy h2 span,
+.x1-companion__copy h2 span,
 .collab-stage__copy h3 span,
 .x1-stage__copy h3 span {
   display: block;
@@ -253,13 +360,14 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
 }
 
 @media (max-width: 960px) {
+  /* Align contact with other tablet bands: single column. */
   .contact-band__inner {
-    grid-template-columns: minmax(12rem, 1fr) minmax(14rem, 0.9fr);
+    grid-template-columns: 1fr;
     gap: clamp(1.25rem, 3vw, 2rem);
   }
 }
 
-/* Mid breakpoint: contact stays 2-col — soften type / allow wrap so titles fit. */
+/* Mid breakpoint: soften type / allow wrap so titles fit. */
 @media (min-width: 761px) and (max-width: 960px) {
   .contact-band__copy h2 {
     font-size: clamp(1.85rem, 3.4vw, 2.65rem);
@@ -269,7 +377,9 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
   .contact-band__copy h2 span,
   .intro-band__copy h2 span,
   .section-head h2 span,
-  .about-stage__copy h2 span {
+  .about-stage__copy h2 span,
+  .x1-companion__copy h2 span,
+  .hero-copy h1 span {
     white-space: normal;
   }
 }
@@ -280,26 +390,61 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
     align-items: start;
     min-height: 0;
     gap: 1.25rem;
-    padding-block: 1.25rem;
+    padding-block: 1.1rem 0.75rem;
   }
 
   .contact-band__aside {
     align-items: stretch;
     justify-content: flex-start;
+    min-height: 0;
     padding-bottom: 0;
   }
 
   .contact-band__copy {
+    gap: 0;
+    min-height: 0;
     padding-top: 0;
+    padding-bottom: 0;
   }
 
   .contact-band__media {
+    flex: 0 0 auto;
     max-width: min(100%, 24rem);
     margin-inline: auto;
   }
 
+  .contact-band__media img {
+    max-height: min(16rem, 38vh);
+  }
+
   .contact-band__action .button--primary.button--large {
     width: 100%;
+  }
+
+  .contact-band__footer .footer__inner {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 1.15rem;
+    padding-bottom: 3.25rem;
+  }
+
+  .contact-band__footer .footer__meta {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .contact-band__footer .footer__copy {
+    padding-right: 0;
+  }
+
+  .contact-band__footer .footer__top {
+    right: 0;
+    bottom: 0.35rem;
+  }
+
+  .contact-band__footer .footer__logo {
+    justify-self: start;
+    width: min(6.5rem, 42vw);
   }
 
   /* On narrow screens, allow soft wrap only if a single line would overflow. */
@@ -308,6 +453,7 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
   .intro-band__copy h2,
   .section-head h2,
   .about-stage__copy h2,
+  .x1-companion__copy h2,
   .x1-stage__copy h3 {
     max-width: none;
   }
@@ -317,29 +463,24 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
   .intro-band__copy h2 span,
   .section-head h2 span,
   .about-stage__copy h2 span,
+  .x1-companion__copy h2 span,
   .x1-stage__copy h3 span {
     white-space: normal;
   }
 
-  /* Keep hero copy + rail stacked; avoid mid-width 2-col squeeze. */
+  /* Hero is copy-only after removing the feature-pill rail. */
   .hero__content {
     grid-template-columns: minmax(0, 1fr);
     min-width: 0;
-    gap: 1.1rem;
+    gap: 0;
   }
 
-  .hero-rail {
-    width: 100%;
-    max-width: none;
-    justify-self: stretch;
-  }
-
-  /* Center the floating hero cue; 62% offset reads clipped on ~390px. */
+  /* Floating cues stay centered in the bottom safe zone on all widths. */
   .section-guide--float {
     left: 50%;
   }
 
-  /* Avoid 100vw-based side margin shoving the X1 cue off-screen. */
+  /* Keep X1 cue centered with other bands. */
   .x1-band > .section-guide {
     margin-inline: auto;
   }
@@ -407,18 +548,37 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
 /* Header offset for scroll-padding / masthead — match site --header-height. */
 :root {
   --xo-header-height: 5.25rem;
-  --xo-anchor-gap: 0;
+  --xo-anchor-gap: 0px;
   /* One shared page frame under the masthead — every band uses the same height. */
   --xo-section-min-height: calc(
-    var(--xo-live-viewport, 100dvh) - var(--xo-header-height) - var(--xo-anchor-gap)
+    var(--xo-live-viewport, 100dvh) - var(--xo-header-height) -
+      var(--xo-anchor-gap)
   );
+}
+
+/* 01 / OVERVIEW — temporary flat ground (no gradient / no legacy card chrome). */
+#overview.intro-band {
+  background: #ebebeb;
+  border-top: 0;
+  border-bottom: 0;
+}
+
+#overview .intro-band__inner {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  padding-inline: 0;
 }
 
 /* Align each page to the same usable viewport proportion. */
 #overview,
 #x1,
+#x1-companion,
 #collab,
 #about,
+#expo,
+#feature,
 #contact {
   min-height: var(--xo-section-min-height);
   box-sizing: border-box;
@@ -426,8 +586,11 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
 
 /* Keep the section guide pinned to the bottom of the shared frame. */
 #x1,
+#x1-companion,
 #collab,
 #about,
+#expo,
+#feature,
 #contact {
   display: flex;
   flex-direction: column;
@@ -435,8 +598,11 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
 
 @media (max-width: 960px) {
   /* Stacked layouts: avoid forced empty slabs; content defines height.
-     Overview (page 2) keeps a full mobile frame — desktop already does. */
+     Overview (page 2) keeps a full mobile frame — desktop already does.
+     Feature reel keeps its viewport frame (see #feature.feature-reel below).
+     Expo mosaic keeps its frame via #expo.expo-band later in this file. */
   #x1,
+  #x1-companion,
   #collab,
   #about,
   #contact {
@@ -461,8 +627,12 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
   }
 
   #overview .intro-band__rail {
-    min-height: clamp(15rem, 38vh, 20rem);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: none;
+    min-height: clamp(18rem, 44vh, 24rem);
     align-content: end;
+    justify-items: stretch;
+    padding-inline: 0;
   }
 
   #overview .intro-band__character {
@@ -507,9 +677,7 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
 
 @media (max-width: 760px) {
   #overview.intro-band {
-    min-height: calc(
-      var(--xo-live-viewport, 100dvh) - var(--xo-header-height)
-    );
+    min-height: calc(var(--xo-live-viewport, 100dvh) - var(--xo-header-height));
     padding-block: 0.55rem 1rem;
   }
 
@@ -521,10 +689,15 @@ header.masthead .nav .button.button--ghost.button--nav:active span[aria-hidden="
   }
 
   #overview .intro-band__rail {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: none;
     min-height: 0;
     height: 100%;
     align-content: stretch;
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    justify-items: stretch;
+    /* Drop legacy dual-slot padding so the carousel can use the full rail. */
+    padding: 0;
   }
 
   #overview .intro-band__character {
@@ -689,10 +862,12 @@ header.masthead.menu-open .nav-toggle {
 /* Kickers / marks on light bands — VI XOLO绿 (replaces off-spec #5fbf2d / #2f7a18). */
 .intro-band .kicker,
 .about-stage__copy > .kicker,
+#expo .expo-wall__intro .kicker,
 .about-stage__mark {
   color: var(--xolo-green);
 }
 .collab-band .section-head .kicker,
+#expo .expo-wall__intro .kicker,
 .about-stage__copy > .kicker {
   margin: 0;
   font-size: 0.72rem;
@@ -703,7 +878,8 @@ header.masthead.menu-open .nav-toggle {
 
 .intro-band__copy > h2,
 .collab-band .section-head h2,
-.about-stage__copy > h2 {
+.about-stage__copy > h2,
+.x1-companion__copy > h2 {
   display: grid;
   gap: 0.06em;
   max-width: none;
@@ -717,7 +893,8 @@ header.masthead.menu-open .nav-toggle {
 
 .intro-band__copy > h2 span,
 .collab-band .section-head h2 span,
-.about-stage__copy > h2 span {
+.about-stage__copy > h2 span,
+.x1-companion__copy > h2 span {
   display: block;
   line-height: inherit;
 }
@@ -725,7 +902,8 @@ header.masthead.menu-open .nav-toggle {
 @media (max-width: 760px) {
   .intro-band__copy > h2,
   .collab-band .section-head h2,
-  .about-stage__copy > h2 {
+  .about-stage__copy > h2,
+  .x1-companion__copy > h2 {
     font-size: clamp(2.15rem, 9vw, 2.85rem);
     line-height: 1.12;
   }
@@ -748,31 +926,120 @@ header.masthead.menu-open .nav-toggle {
   }
 }
 
-/* About gallery — lifestyle desk scenes (source 768×1024 → 3:4). */
+/* About — copy left, emotion character right (no secondary gallery yet). */
+.about-stage {
+  align-items: stretch;
+}
+
+.about-stage__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100%;
+}
+
 .about-stage__aside {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(1.25rem, 2.5vh, 2rem);
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0;
   min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 0 0 clamp(0.35rem, 1.2vh, 0.85rem);
+  border-left: 0;
 }
 
+.about-stage__character {
+  display: grid;
+  place-items: end center;
+  width: 100%;
+  max-width: min(100%, 28rem);
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+.about-stage__character img {
+  display: block;
+  width: min(100%, 26rem);
+  height: auto;
+  max-height: min(38rem, 74vh);
+  margin-inline: auto;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 1.35rem 2.1rem rgba(45, 34, 31, 0.16));
+  transform: none;
+  transform-origin: center bottom;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .about-stage__character:hover img {
+    transform: scale(1.045);
+  }
+}
+
+@media (max-width: 960px) {
+  .about-stage__aside {
+    align-items: center;
+    justify-content: flex-end;
+    min-height: clamp(16rem, 48vw, 24rem);
+    padding-bottom: 0;
+  }
+
+  .about-stage__character {
+    max-width: min(100%, 20rem);
+  }
+
+  .about-stage__character img {
+    width: min(100%, 18.5rem);
+    max-height: min(26rem, 52vh);
+  }
+}
+
+@media (max-width: 760px) {
+  .about-stage__aside {
+    min-height: 0;
+    padding-top: clamp(0.35rem, 1.5vh, 0.75rem);
+  }
+
+  .about-stage__character {
+    max-width: min(100%, 15.5rem);
+  }
+
+  .about-stage__character img {
+    width: min(100%, 14.5rem);
+    max-height: min(20rem, 46vh);
+  }
+}
+
+/* Right column = full-bleed photo plane (not a floating card). */
 .about-stage__gallery {
   position: relative;
-  width: min(100%, clamp(20rem, 34vw, 30rem));
-  margin: 0 0 0 auto;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: clamp(22rem, 56vh, 40rem);
+  margin: 0;
 }
 
 .about-stage__gallery-frame {
   position: relative;
-  aspect-ratio: 3 / 4;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  aspect-ratio: auto;
   overflow: hidden;
-  background: #ddd;
+  background: #d8d8d4;
   touch-action: pan-y;
   cursor: default;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.55) inset,
-    0 1.1rem 2.4rem rgba(4, 3, 3, 0.08);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .about-stage__gallery-frame::after {
@@ -780,9 +1047,9 @@ header.masthead.menu-open .nav-toggle {
   position: absolute;
   inset: auto 0 0;
   z-index: 1;
-  height: 28%;
+  height: 22%;
   pointer-events: none;
-  background: linear-gradient(180deg, transparent 0%, rgba(4, 3, 3, 0.34) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(4, 3, 3, 0.22) 100%);
 }
 
 .about-stage__gallery-track {
@@ -829,36 +1096,34 @@ header.masthead.menu-open .nav-toggle {
   position: absolute;
   top: 50%;
   z-index: 3;
-  width: 2.55rem;
-  height: 2.55rem;
+  width: 2.35rem;
+  height: 2.35rem;
   display: grid;
   place-items: center;
   margin: 0;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: 0;
   border-radius: 999px;
-  color: #10140f;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 0.35rem 1rem rgba(4, 3, 3, 0.16);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(4, 3, 3, 0.28);
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   opacity: 0;
   cursor: pointer;
   transform: translateY(-50%) scale(0.94);
   transition:
     opacity 0.28s ease,
     background 0.22s ease,
-    border-color 0.22s ease,
     color 0.22s ease,
-    transform 0.28s cubic-bezier(0.22, 0.82, 0.2, 1),
-    box-shadow 0.22s ease;
+    transform 0.28s cubic-bezier(0.22, 0.82, 0.2, 1);
 }
 
 .about-stage__gallery-nav:hover {
-  color: var(--xolo-green-ink, #071006);
-  border-color: rgba(110, 199, 59, 0.55);
-  background: var(--xolo-green, #6ec73b);
-  box-shadow: 0 0.4rem 1.15rem rgba(110, 199, 59, 0.28);
+  color: #fff;
+  border-color: transparent;
+  background: rgba(4, 3, 3, 0.48);
+  box-shadow: none;
   transform: translateY(-50%) scale(1);
 }
 
@@ -948,8 +1213,9 @@ header.masthead.menu-open .nav-toggle {
 
 @media (min-width: 761px) and (max-width: 960px) {
   .about-stage__gallery {
-    width: min(86vw, 26rem);
-    margin-inline: auto;
+    width: 100%;
+    margin: 0;
+    min-height: clamp(20rem, 48vh, 32rem);
   }
 }
 
@@ -989,23 +1255,31 @@ header.masthead.menu-open .nav-toggle {
    No fill, no border box, no accent color: just a hairline, a faint label and a
    thin chevron that inherit the section's own tone. */
 .section-guide {
+  position: relative;
+  z-index: 6;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.55rem;
   width: fit-content;
+  max-width: calc(100% - 2rem);
   margin: clamp(2.5rem, 6vw, 4.5rem) auto clamp(1.75rem, 4vw, 3rem);
-  padding: 0;
+  padding: 0.35rem 0.75rem;
   border: 0;
   background: none;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+  pointer-events: auto;
+  isolation: isolate;
   font-size: 0.6rem;
   font-weight: 500;
   letter-spacing: 0.36em;
   text-indent: 0.36em;
   text-transform: uppercase;
-  transition: color 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    color 0.4s ease,
+    opacity 0.4s ease,
+    transform 0.4s ease;
 }
 
 /* The hairline — the "line" that anchors the cue without any hard edge. */
@@ -1054,14 +1328,15 @@ header.masthead.menu-open .nav-toggle {
   animation-name: section-guide-bob-up;
 }
 
-/* Floating variant sits over the hero video. */
+/* Floating variant sits over media, always centered in a clear bottom safe zone. */
 .section-guide--float {
   position: absolute;
-  left: 62%;
-  bottom: clamp(1.1rem, 4vh, 2.4rem);
-  z-index: 3;
+  left: 50%;
+  bottom: max(1.25rem, env(safe-area-inset-bottom, 0px) + 1rem);
+  z-index: 8;
   margin: 0;
   transform: translateX(-50%);
+  pointer-events: auto;
 }
 
 /* Overview stacks the cue under the card — never beside it in a row flex. */
@@ -1079,7 +1354,7 @@ header.masthead.menu-open .nav-toggle {
   align-self: center;
   width: max-content;
   max-width: 100%;
-  margin: clamp(1.25rem, 3vw, 2rem) auto clamp(1.5rem, 3vw, 2.25rem);
+  margin: clamp(1.25rem, 3vw, 2rem) auto var(--xo-guide-margin-bottom);
   transform: none;
 }
 
@@ -1089,10 +1364,11 @@ header.masthead.menu-open .nav-toggle {
 
 /* 04 / IP COLLECTIVE — same vertical cue as overview / X1 (line → label → chevron). */
 .collab-band > .section-guide {
-  position: static;
+  position: relative;
+  z-index: 6;
   flex-direction: column;
   gap: 0.55rem;
-  margin: auto auto clamp(1.5rem, 3vw, 2.5rem);
+  margin: auto auto var(--xo-guide-margin-bottom);
 }
 
 .collab-band > .section-guide::before {
@@ -1100,13 +1376,35 @@ header.masthead.menu-open .nav-toggle {
   height: clamp(1.5rem, 3vw, 2.25rem);
 }
 
-/* 03 / COMPANY — same vertical cue as other bands. */
+/* Shared band / title / guide rhythm (X1 · Companion · About · Collab).
+   Expo is full-bleed photo wall — excluded from band pad. */
+.x1-band,
+.x1-companion-band,
+#about.about-band,
+.collab-band {
+  padding-top: var(--xo-band-pad-top);
+}
+
+.x1-band > .section-head,
+.collab-band > .section-head {
+  flex: 0 0 auto;
+  margin-top: var(--xo-head-margin-top);
+  margin-bottom: var(--xo-head-margin-bottom);
+  padding-top: var(--xo-head-pad-top);
+}
+
+#about.about-band > .about-stage {
+  margin-top: var(--xo-head-margin-top);
+  padding-top: clamp(0.35rem, 1.2vh, 1rem);
+}
+
 #about > .section-guide {
   position: relative;
   top: 0;
+  z-index: 6;
   flex-direction: column;
   gap: 0.55rem;
-  margin: auto auto clamp(1.5rem, 3vw, 2.5rem);
+  margin: auto auto var(--xo-guide-margin-bottom);
 }
 
 #about > .section-guide::before {
@@ -1114,21 +1412,527 @@ header.masthead.menu-open .nav-toggle {
   height: clamp(1.5rem, 3vw, 2.25rem);
 }
 
-/* 02 / THE X1 title block — sit lower in the page frame. */
-.x1-band > .section-head {
-  margin-top: clamp(1.75rem, 4.5vh, 3.25rem);
-  padding-top: clamp(0.75rem, 2vh, 1.5rem);
-}
-
-/* Keep the X1-to-collab cue on the left, within the shared page frame. */
-.x1-band > .section-guide {
+/* Keep the X1-to-next cue centered in the shared page frame (same as other bands). */
+.x1-band > .section-guide,
+.x1-companion-band > .section-guide {
   position: relative;
   top: 0;
-  align-self: flex-start;
+  z-index: 6;
+  align-self: center;
   margin-top: auto;
   margin-right: auto;
-  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
-  margin-left: var(--gutter, clamp(1.25rem, 4vw, 4.5rem));
+  margin-bottom: var(--xo-guide-margin-bottom);
+  margin-left: auto;
+}
+
+/*
+  02 / DESK COMPANION — photo stage left, title copy right.
+*/
+.x1-companion-band {
+  color: rgba(246, 246, 240, 0.96);
+  background: linear-gradient(180deg, #090b0e 0%, #101216 48%, #090b0e 100%);
+  padding-top: clamp(0.65rem, 1.6vh, 1.15rem);
+}
+
+/*
+  Shared English lead line on dark desk bands
+  (Designed to evolve / Always on the desk).
+*/
+.x1-band .kicker--desk,
+.x1-companion-band .kicker--desk {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  color: var(--xolo-green-soft, #8de85d);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.x1-band .kicker--desk::before,
+.x1-companion-band .kicker--desk::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.95;
+  box-shadow: 0 0 0.55rem rgba(141, 232, 93, 0.35);
+}
+
+.x1-stage__copy .kicker--desk {
+  margin: 0;
+}
+
+.x1-stage__copy h3 {
+  margin-top: 0.75rem;
+}
+
+.x1-companion {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  display: grid;
+  /* Media stage + readable title column (fits 两行主标题 without looking starved). */
+  grid-template-columns: minmax(0, 1.28fr) minmax(18rem, 26rem);
+  gap: clamp(1.35rem, 2.8vw, 2.75rem);
+  align-items: center;
+  /* Do not override .shell width — keep 1520 like sibling bands. */
+  width: min(
+    calc(100% - var(--xo-shell-gap, clamp(1rem, 2.4vw, 1.5rem)) * 2),
+    var(--xo-shell-max, 1520px)
+  );
+  margin-inline: auto;
+  box-sizing: border-box;
+  min-height: calc(
+    var(--xo-section-min-height) - var(--xo-band-pad-top) -
+      var(--xo-guide-margin-bottom) - 3.35rem
+  );
+  padding-block: 0;
+}
+
+.x1-companion__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0;
+  min-width: 0;
+  max-width: none;
+  width: 100%;
+  padding: 0;
+  justify-self: stretch;
+  align-self: center;
+}
+
+.x1-companion__copy > .kicker:first-child {
+  margin: 0;
+  color: rgba(246, 246, 240, 0.72);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.x1-companion__copy > h2 {
+  color: rgba(246, 246, 240, 0.96);
+  max-width: none;
+}
+
+.x1-companion__copy .kicker--desk {
+  margin: 1.35rem 0 0;
+}
+
+.x1-companion__lede {
+  margin: 0.85rem 0 0;
+  max-width: none;
+  color: rgba(241, 240, 235, 0.78);
+  font-size: clamp(0.95rem, 1.05vw, 1.02rem);
+  line-height: 1.72;
+  text-wrap: pretty;
+}
+
+.x1-companion__gallery {
+  display: grid;
+  /*
+    Keep the left portrait near its current width; give the extra
+    gallery width to the two stacked landscape tiles on the right.
+    Cap height so all three slots read flatter / more panoramic.
+  */
+  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(0.55rem, 0.95vw, 0.85rem);
+  min-width: 0;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1.65 / 1;
+  max-height: min(64vh, 38rem);
+  min-height: 0;
+  align-self: center;
+}
+
+.x1-companion__shot {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  aspect-ratio: auto;
+  min-width: 0;
+  min-height: 0;
+  background: #0a0c0f;
+}
+
+.x1-companion__shot--host {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  background: #121417;
+}
+
+.x1-companion__shot--product {
+  grid-column: 2;
+  grid-row: 1;
+  background: #0a0c0f;
+}
+
+.x1-companion__shot--setup {
+  grid-column: 2;
+  grid-row: 2;
+  background: #0a0c0f;
+}
+
+.x1-companion__shot picture,
+.x1-companion__shot img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.x1-companion__shot img {
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Top-right scene photo — fill the frame. */
+.x1-companion__shot--product img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.x1-companion__shot--setup img {
+  object-position: center 42%;
+}
+
+/* Left column carousel (moved from 03 / COMPANY). */
+.x1-companion__carousel {
+  display: flex;
+  flex-direction: column;
+}
+
+.x1-companion__carousel-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  touch-action: pan-y;
+  background: #121417;
+}
+
+.x1-companion__carousel-track {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.82s cubic-bezier(0.22, 0.82, 0.2, 1);
+  will-change: transform;
+}
+
+.x1-companion__carousel-slide {
+  position: relative;
+  flex: 0 0 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.x1-companion__carousel-slide picture,
+.x1-companion__carousel-slide img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.x1-companion__carousel-slide img {
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.04);
+  transform-origin: center;
+  transition: transform 0.95s cubic-bezier(0.22, 0.82, 0.2, 1);
+}
+
+.x1-companion__carousel-slide.is-active img {
+  transform: scale(1);
+}
+
+.x1-companion__carousel.is-dragging .x1-companion__carousel-slide img {
+  transition: none;
+}
+
+.x1-companion__carousel-nav {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(4, 3, 3, 0.32);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition:
+    opacity 0.25s ease,
+    background 0.25s ease;
+}
+
+.x1-companion__carousel-nav:hover {
+  background: rgba(4, 3, 3, 0.5);
+}
+
+.x1-companion__carousel-nav svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.x1-companion__carousel-nav--prev {
+  left: 0.65rem;
+}
+
+.x1-companion__carousel-nav--next {
+  right: 0.65rem;
+}
+
+.x1-companion__carousel-frame:hover .x1-companion__carousel-nav,
+.x1-companion__carousel-nav:focus-visible {
+  opacity: 1;
+}
+
+.x1-companion__carousel-nav:focus-visible {
+  outline: 2px solid var(--xolo-green-soft, #8de85d);
+  outline-offset: 2px;
+}
+
+.x1-companion__carousel-dots {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(3.2rem, 6vh, 4rem);
+  z-index: 3;
+  display: flex;
+  gap: 0.4rem;
+  transform: translateX(-50%);
+}
+
+.x1-companion__carousel-dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.38);
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.x1-companion__carousel-dot.is-active {
+  background: #fff;
+  transform: scale(1.15);
+}
+
+.x1-companion__carousel-dot:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.x1-companion__carousel-dot:focus-visible {
+  outline: 2px solid var(--xolo-green-soft, #8de85d);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .x1-companion__shot--product:hover img,
+  .x1-companion__shot--setup:hover img {
+    transform: scale(1.03);
+  }
+}
+
+.x1-companion__shot figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.28rem;
+  padding: clamp(2.2rem, 4.5vh, 3rem) clamp(0.95rem, 1.5vw, 1.25rem)
+    clamp(0.85rem, 1.6vh, 1.1rem);
+  margin: 0;
+  color: #f6f6f3;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(4, 5, 7, 0.2) 40%,
+    rgba(4, 5, 7, 0.78) 100%
+  );
+  pointer-events: none;
+}
+
+.x1-companion__shot--product figcaption {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(4, 5, 7, 0.1) 42%,
+    rgba(4, 5, 7, 0.68) 100%
+  );
+}
+
+.x1-companion__shot figcaption span {
+  color: var(--xolo-green-soft, #8de85d);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.x1-companion__shot figcaption strong {
+  font-size: clamp(0.92rem, 1.35vw, 1.08rem);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+@media (max-width: 1100px) {
+  .x1-companion {
+    grid-template-columns: minmax(0, 1.2fr) minmax(16rem, 22rem);
+    gap: clamp(1.15rem, 2.2vw, 1.85rem);
+  }
+
+  .x1-companion__gallery {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+}
+
+@media (max-width: 960px) {
+  .x1-companion {
+    grid-template-columns: 1fr;
+    gap: clamp(1.1rem, 2.5vh, 1.6rem);
+    align-items: stretch;
+    min-height: 0;
+  }
+
+  .x1-companion__copy {
+    order: -1;
+    max-width: 36rem;
+    padding: 0;
+    align-self: start;
+  }
+
+  .x1-companion__gallery {
+    grid-template-columns: 0.9fr 1.1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    height: auto;
+    min-height: clamp(20rem, 52vw, 28rem);
+    aspect-ratio: 16 / 11;
+  }
+
+  .x1-companion__shot--host {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+
+  .x1-companion__shot--product {
+    grid-column: 2;
+    grid-row: 1;
+    aspect-ratio: auto;
+  }
+
+  .x1-companion__shot--setup {
+    grid-column: 2;
+    grid-row: 2;
+    aspect-ratio: auto;
+  }
+
+  .x1-companion__carousel-nav {
+    opacity: 0.85;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Carousel full-bleed on top; keep the two lifestyle tiles as a pair below
+     so the band stays compact instead of three stacked full-width shots. */
+  .x1-companion__gallery {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    aspect-ratio: auto;
+    min-height: 0;
+    height: auto;
+  }
+
+  .x1-companion__shot--host {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    aspect-ratio: 4 / 3;
+    min-height: clamp(13.5rem, 58vw, 19rem);
+  }
+
+  .x1-companion__shot--product {
+    grid-column: 1;
+    grid-row: 2;
+    aspect-ratio: 16 / 10;
+  }
+
+  .x1-companion__shot--setup {
+    grid-column: 2;
+    grid-row: 2;
+    aspect-ratio: 16 / 10;
+  }
+
+  .x1-companion__lede {
+    max-width: none;
+  }
+
+  .x1-companion__shot figcaption strong {
+    font-size: 0.72rem;
+  }
+}
+
+/* 04 / COMPANY — copy + emotion character; right column reserved for future media. */
+#about .about-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(15rem, 0.92fr);
+  align-items: stretch;
+  column-gap: clamp(1.25rem, 3vw, 2.75rem);
+  min-height: calc(
+    var(--xo-section-min-height) - var(--xo-band-pad-top) -
+      var(--xo-guide-margin-bottom) - 3.35rem
+  );
+}
+
+#about .about-stage__copy {
+  border-right: 0;
+  border-bottom: 0;
+  max-width: 40rem;
+  padding-right: clamp(0.5rem, 1.5vw, 1.25rem);
+}
+
+@media (max-width: 960px) {
+  #about .about-stage {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    row-gap: clamp(1rem, 3vh, 1.75rem);
+  }
+
+  #about .about-stage__copy {
+    max-width: none;
+    padding-right: 0;
+  }
 }
 
 /* 02 / THE X1 — preserve the source artwork ratio and restore type hierarchy. */
@@ -1138,6 +1942,13 @@ header.masthead.menu-open .nav-toggle {
   line-height: 0.99;
 }
 
+/* site.min clips these stages; keep overflow open so lifts / hover zoom aren't cut. */
+.x1-stage,
+.about-stage,
+.collab-stage {
+  overflow: visible;
+}
+
 @media (min-width: 961px) {
   .x1-stage {
     align-items: start;
@@ -1145,7 +1956,8 @@ header.masthead.menu-open .nav-toggle {
 
   .x1-stage__media {
     position: relative;
-    top: clamp(-3.5rem, -6vh, -2rem);
+    /* Mild lift only — large negative top used to get clipped by overflow:hidden. */
+    top: clamp(-1.75rem, -3vh, -0.75rem);
   }
 }
 
@@ -1186,7 +1998,7 @@ header.masthead.menu-open .nav-toggle {
 
 .x1-stage__media .tile {
   overflow: hidden;
-  background: linear-gradient(180deg, #0e1013 0, #0a0c0f 100%);
+  background: #090b0e;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1232,10 +2044,30 @@ header.masthead.menu-open .nav-toggle {
 }
 
 /* Soften hero video wash: keep left/bottom text contrast, let the product
-   read clearer through the center and right of the frame. */
+   read clearer through the center and right of the frame.
+   Force single column — site.min still expects a removed .hero-rail. */
+.hero__content {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: min(40rem, 100%);
+}
+
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 560px) and (max-width: 960px) {
+  .hero__content {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: min(40rem, 100%);
+  }
+
+  .hero__stage {
+    border-radius: 0;
+  }
+}
+
+.hero-copy {
+  max-width: 36rem;
+}
+
 .hero__wash {
-  background:
-    linear-gradient(
+  background: linear-gradient(
       90deg,
       rgba(3, 4, 6, 0.38) 0%,
       rgba(3, 4, 6, 0.16) 26%,
@@ -1288,9 +2120,12 @@ header.masthead.menu-open .nav-toggle {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .intro-band__character:hover img,
-  .expo-gallery__item:hover img {
+  .intro-band__character:hover img {
     transform: scale(1.12);
+  }
+
+  .about-stage__character:hover img {
+    transform: scale(1.045);
   }
 
   .contact-band__media:hover img {
@@ -1338,6 +2173,15 @@ header.masthead.menu-open .nav-toggle {
 
 .section-guide--on-light:hover {
   color: rgba(4, 3, 3, 0.88);
+}
+
+.section-guide--on-photo {
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.4);
+}
+
+.section-guide--on-photo:hover {
+  color: #fff;
 }
 
 .section-guide:hover {
@@ -1417,8 +2261,9 @@ header.masthead.menu-open .nav-toggle {
   }
 
   .about-stage__gallery {
-    width: min(88vw, 22rem);
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
+    min-height: clamp(18rem, 52vh, 26rem);
   }
 
   .section-guide {
@@ -1605,5 +2450,895 @@ html.has-reveal-motion .section-guide {
     transform: none;
     transition: none;
     will-change: auto;
+  }
+}
+
+/* Full-viewport product reel — own page after 04, gutters match .shell (--xo-shell-gap).
+   Stage locks to 16:9 so the source frame is never cropped. */
+.feature-reel {
+  --feature-side-gutter: var(--xo-shell-gap, clamp(1rem, 2vw, 1.6rem));
+  --feature-top-gutter: var(--xo-band-pad-top);
+  --feature-guide-space: calc(var(--xo-guide-margin-bottom) + 3.5rem);
+  --feature-stage-max-height: calc(
+    var(--xo-live-viewport, 100dvh) - var(--xo-header-height, 5.25rem) -
+      var(--feature-top-gutter) - var(--feature-guide-space)
+  );
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: calc(
+    var(--xo-live-viewport, 100dvh) - var(--xo-header-height, 5.25rem)
+  );
+  margin: 0;
+  padding: var(--feature-top-gutter) var(--feature-side-gutter) 0;
+  background: #040303;
+  overflow: hidden;
+  scroll-margin-top: 0;
+}
+
+/* Keep the reel page frame on tablet — shared #id rules must not collapse it. */
+#feature.feature-reel {
+  min-height: calc(
+    var(--xo-live-viewport, 100dvh) - var(--xo-header-height, 5.25rem)
+  );
+}
+
+.feature-reel__stage {
+  position: relative;
+  z-index: 1;
+  flex: 0 1 auto;
+  width: min(
+    100%,
+    var(--xo-shell-max, 1520px),
+    calc(var(--feature-stage-max-height) * 16 / 9)
+  );
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: var(--feature-stage-max-height);
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: clamp(0.75rem, 1.3vw, 1.15rem);
+  background: #040303;
+}
+
+.feature-reel__poster,
+.feature-reel__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.feature-reel__poster {
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+
+.feature-reel__poster.is-hidden {
+  opacity: 0;
+}
+
+.feature-reel__video {
+  z-index: 1;
+  display: block;
+  background: #040303;
+}
+
+.feature-reel > .section-guide {
+  position: relative;
+  z-index: 6;
+  flex-shrink: 0;
+  align-self: center;
+  margin: clamp(1.1rem, 2.4vh, 1.65rem) auto var(--xo-guide-margin-bottom);
+}
+
+.feature-reel > .section-guide:hover {
+  transform: translateY(3px);
+}
+
+/* Overview IP shell carousel — cutout products, hover/drag to choose. */
+#overview .intro-band__inner {
+  grid-template-columns: minmax(0, 0.92fr) minmax(20rem, 1.08fr);
+  align-items: stretch;
+  column-gap: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+#overview .intro-band__rail {
+  display: grid;
+  /* Kill legacy site.min 2-col "note | character" track — only IP carousel remains. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: none;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: clamp(0.55rem, 1.2vh, 0.85rem);
+  min-width: 0;
+  width: 100%;
+  align-content: stretch;
+  justify-items: stretch;
+  border-left: 0;
+  border-top: 0;
+}
+
+.ip-shells {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  min-width: 0;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+}
+
+.ip-shells__viewport {
+  position: relative;
+  min-height: clamp(26rem, 64vh, 44rem);
+  overflow: hidden;
+  touch-action: pan-y;
+  cursor: ew-resize;
+  user-select: none;
+}
+
+.ip-shells__track {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  transition: transform 0.55s cubic-bezier(0.22, 0.82, 0.2, 1);
+  will-change: transform;
+}
+
+.ip-shells.is-dragging .ip-shells__track,
+[data-ip-shells].is-dragging .ip-shells__track {
+  transition: none;
+}
+
+.ip-shells__slide {
+  position: relative;
+  flex: 0 0 100%;
+  display: grid;
+  place-items: end center;
+  margin: 0;
+  min-width: 0;
+  height: 100%;
+}
+
+.ip-shells__slide picture {
+  display: contents;
+}
+
+.ip-shells__slide img {
+  width: auto;
+  max-width: min(100%, 44rem);
+  height: auto;
+  max-height: min(46rem, 82vh);
+  aspect-ratio: 920 / 1120;
+  object-fit: contain;
+  object-position: center bottom;
+  transform: scale(1);
+  opacity: 0.42;
+  transition:
+    transform 0.55s cubic-bezier(0.22, 0.82, 0.2, 1),
+    opacity 0.45s ease;
+}
+
+/* All five slides share the same scale / anchor — cover keeps soft shadow only. */
+.ip-shells__slide:first-child img {
+  filter: drop-shadow(0 1.6rem 2.8rem rgba(4, 3, 3, 0.12));
+}
+
+.ip-shells__slide:not(:first-child) img {
+  filter: none;
+}
+
+.ip-shells__slide.is-active img {
+  transform: scale(1.06);
+  opacity: 1;
+}
+
+.ip-shells__dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.ip-shells__dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(4, 3, 3, 0.18);
+  cursor: pointer;
+  transition:
+    width 0.3s ease,
+    background 0.3s ease;
+}
+
+.ip-shells__dot.is-active {
+  width: 1.15rem;
+  background: rgba(4, 3, 3, 0.72);
+}
+
+.ip-shells__dot:focus-visible {
+  outline: 2px solid var(--xolo-green, #6ec73b);
+  outline-offset: 3px;
+}
+
+@media (max-width: 960px) {
+  #overview .intro-band__inner {
+    grid-template-columns: 1fr;
+  }
+
+  #overview .intro-band__rail {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: none;
+    min-height: clamp(22rem, 52vh, 30rem);
+    padding-inline: 0;
+  }
+
+  .ip-shells__viewport {
+    min-height: clamp(20rem, 48vh, 28rem);
+  }
+}
+
+@media (max-width: 760px) {
+  .ip-shells__viewport {
+    min-height: clamp(18rem, 52vw, 24rem);
+  }
+
+  .ip-shells__slide img {
+    max-width: min(100%, 22rem);
+    max-height: min(26rem, 52vh);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ip-shells__track,
+  .ip-shells__slide img,
+  .ip-shells__dot {
+    transition: none;
+  }
+}
+
+/* Keep 03 / COMPANY on the light ground. Expo is photo-led. */
+.about-band {
+  background: linear-gradient(180deg, #e9e9e6 0%, #e1e1dd 100%);
+}
+
+/*
+  Expo photo wall — full-bleed mosaic, title lives inside the wall.
+  Left scene spans full height; title overlays top-left of the wall.
+*/
+#expo.expo-band {
+  --expo-gap: 3px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: #f4f4f1;
+  box-sizing: border-box;
+  overflow: clip;
+  scroll-margin-top: 0;
+  padding: 0;
+  min-height: var(--xo-section-min-height);
+  background: #0c0d0f;
+}
+
+#expo > .expo-wall {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+}
+
+#expo .expo-wall__intro {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  max-width: none;
+  padding:
+    clamp(1.25rem, 2.8vh, 2.1rem)
+    clamp(1.25rem, 2.4vw, 2.1rem)
+    clamp(2.75rem, 6.5vh, 4.75rem);
+  margin: 0;
+  pointer-events: none;
+  border-radius: 0;
+  /* Full-width top wash so the title band doesn't stop mid-wall. */
+  background: linear-gradient(
+    180deg,
+    rgba(6, 7, 9, 0.82) 0%,
+    rgba(6, 7, 9, 0.58) 32%,
+    rgba(6, 7, 9, 0.28) 58%,
+    rgba(6, 7, 9, 0.08) 80%,
+    rgba(6, 7, 9, 0) 100%
+  );
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+#expo .expo-wall__intro .kicker {
+  color: var(--xolo-green-soft, #8de85d);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
+}
+
+#expo .expo-wall__intro h2 {
+  display: grid;
+  gap: 0.06em;
+  max-width: 18ch;
+  margin: 0.55rem 0 0;
+  color: #f7f7f4;
+  font-size: clamp(1.75rem, 3.1vw, 2.85rem);
+  font-weight: 720;
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.45);
+}
+
+#expo .expo-wall__intro h2 span {
+  display: block;
+  line-height: inherit;
+}
+
+#expo > .expo-wall > .expo-gallery {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  display: grid;
+  /* Beat site.min ≤960 single-column stack on tablet / small desktop. */
+  grid-template-columns: minmax(0, 1.28fr) minmax(0, 0.72fr) minmax(0, 0.72fr) !important;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: var(--expo-gap);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: var(--xo-section-min-height);
+  margin: 0;
+  padding: 0;
+  background: #0c0d0f;
+  overflow: hidden;
+}
+
+#expo .expo-gallery__item {
+  position: relative;
+  grid-column: auto;
+  grid-row: auto;
+  aspect-ratio: auto !important;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 0;
+  background: #1a1b1e;
+  isolation: isolate;
+  cursor: zoom-in;
+}
+
+#expo .expo-gallery__item:focus-visible {
+  outline: 2px solid var(--xolo-green-soft, #8de85d);
+  outline-offset: -2px;
+}
+
+#expo .expo-gallery__item--scene {
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+
+#expo .expo-gallery__item--interaction {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+#expo .expo-gallery__item--booth {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+#expo .expo-gallery__item--torii {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+#expo .expo-gallery__item--mecha {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+#expo .expo-gallery__item--mecha img {
+  object-position: center 42%;
+}
+
+#expo .expo-gallery__item::after {
+  content: none !important;
+  display: none !important;
+}
+
+#expo .expo-gallery__item img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
+  object-position: center;
+  filter: none;
+  transform: scale(1.001);
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s ease;
+}
+
+#expo .expo-gallery__item--scene img {
+  object-position: 42% 38%;
+}
+
+#expo .expo-gallery__item--interaction img {
+  object-position: center 32%;
+}
+
+#expo .expo-gallery__item--booth img {
+  object-position: center 48%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #expo .expo-gallery__item:hover img {
+    transform: scale(1.045);
+    filter: brightness(1.04) saturate(1.04);
+  }
+}
+
+#expo .expo-gallery__item figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.2rem;
+  padding: clamp(1.8rem, 4vh, 2.8rem) clamp(0.75rem, 1.4vw, 1.15rem)
+    clamp(0.65rem, 1.3vh, 0.95rem);
+  margin: 0;
+  color: #f6f6f3;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(4, 5, 7, 0.08) 38%,
+    rgba(4, 5, 7, 0.62) 100%
+  );
+  opacity: 0.92;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #expo .expo-gallery__item:hover figcaption {
+    opacity: 1;
+  }
+}
+
+#expo .expo-gallery__item figcaption span {
+  color: var(--xolo-green-soft, #8de85d);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+#expo .expo-gallery__item figcaption strong {
+  max-width: 14em;
+  font-size: clamp(0.72rem, 1.05vw, 0.9rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  text-align: left;
+  text-wrap: balance;
+}
+
+#expo .expo-gallery__item--scene figcaption {
+  max-width: 16rem;
+  padding-left: clamp(1.1rem, 2.2vw, 1.85rem);
+}
+
+#expo .expo-gallery__item--scene figcaption strong,
+#expo .expo-gallery__item--interaction figcaption strong,
+#expo .expo-gallery__item--booth figcaption strong {
+  font-size: clamp(0.8rem, 1.15vw, 0.98rem);
+}
+
+#expo > .section-guide {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(0.85rem, 2vh, 1.4rem);
+  z-index: 6;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0;
+  transform: translateX(-50%);
+}
+
+#expo > .section-guide::before {
+  width: 1px;
+  height: clamp(0.7rem, 1.5vh, 1.15rem);
+  background: currentColor;
+  opacity: 0.55;
+}
+
+#expo > .section-guide:hover {
+  transform: translateX(-50%) translateY(2px);
+}
+
+@media (max-width: 960px) {
+  #expo.expo-band {
+    /* Keep full-bleed mosaic height on tablet / small desktop. */
+    min-height: var(--xo-section-min-height);
+    padding: 0;
+  }
+
+  /* Keep mosaic structure on tablet/small desktop; only soft-stack the title.
+     The horizontal card rail is reserved for phones (≤760). */
+  #expo .expo-wall__intro {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+    padding: clamp(1.1rem, 2.6vh, 1.6rem) clamp(1rem, 2vw, 1.4rem)
+      clamp(2.35rem, 5vh, 3.5rem);
+    background: linear-gradient(
+      180deg,
+      rgba(6, 7, 9, 0.82) 0%,
+      rgba(6, 7, 9, 0.52) 36%,
+      rgba(6, 7, 9, 0.18) 68%,
+      rgba(6, 7, 9, 0) 100%
+    );
+  }
+
+  #expo .expo-wall__intro h2 {
+    font-size: clamp(1.55rem, 3.2vw, 2.1rem);
+  }
+
+  #expo > .expo-wall > .expo-gallery {
+    display: grid;
+    grid-template-columns: minmax(0, 1.28fr) minmax(0, 0.72fr) minmax(0, 0.72fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    width: 100%;
+    height: 100%;
+    min-height: var(--xo-section-min-height);
+    gap: var(--expo-gap);
+    padding: 0;
+    overflow: hidden;
+    background: #0c0d0f;
+    scroll-snap-type: none;
+  }
+
+  #expo .expo-gallery__item,
+  #expo .expo-gallery__item--scene,
+  #expo .expo-gallery__item--interaction,
+  #expo .expo-gallery__item--booth,
+  #expo .expo-gallery__item--torii,
+  #expo .expo-gallery__item--mecha {
+    flex: none;
+    width: auto;
+    border-radius: 0;
+    aspect-ratio: auto !important;
+    scroll-snap-align: none;
+  }
+
+  #expo .expo-gallery__item--scene {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+
+  #expo .expo-gallery__item--interaction {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  #expo .expo-gallery__item--booth {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  #expo .expo-gallery__item--torii {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  #expo .expo-gallery__item--mecha {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  #expo > .section-guide {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(0.85rem, 2vh, 1.4rem);
+    transform: translateX(-50%);
+    margin: 0;
+  }
+
+  #expo > .section-guide:hover {
+    transform: translateX(-50%) translateY(2px);
+  }
+}
+
+@media (max-width: 760px) {
+  .feature-reel {
+    --feature-side-gutter: var(--xo-shell-gap, clamp(1rem, 2.4vw, 1.5rem));
+    --feature-top-gutter: clamp(1rem, 2.4vh, 1.35rem);
+    --feature-guide-space: clamp(5rem, 10vh, 6.25rem);
+    min-height: 0;
+    justify-content: flex-start;
+  }
+
+  #feature.feature-reel {
+    min-height: 0;
+  }
+
+  .feature-reel__stage {
+    width: 100%;
+    max-height: none;
+  }
+
+  /* Expo phone only: compact horizontal card rail. */
+  #expo.expo-band {
+    min-height: 0;
+    padding-inline: clamp(0.85rem, 4vw, 1.15rem);
+    padding-bottom: 0.25rem;
+  }
+
+  #expo .expo-wall__intro {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    max-width: none;
+    padding: clamp(1rem, 2.8vh, 1.35rem) 0.15rem clamp(0.85rem, 2vh, 1.1rem);
+    background: transparent;
+  }
+
+  #expo .expo-wall__intro h2 {
+    font-size: clamp(1.45rem, 6.5vw, 1.85rem);
+  }
+
+  #expo > .expo-wall > .expo-gallery {
+    display: flex;
+    grid-template-columns: none;
+    grid-template-rows: none;
+    align-items: stretch;
+    gap: 0.7rem;
+    width: calc(100% + clamp(0.85rem, 4vw, 1.15rem));
+    height: auto;
+    min-height: 0;
+    margin-inline: 0;
+    padding: 0 clamp(0.85rem, 4vw, 1.15rem) 0.35rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    background: transparent;
+  }
+
+  #expo > .expo-wall > .expo-gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  #expo .expo-gallery__item,
+  #expo .expo-gallery__item--scene,
+  #expo .expo-gallery__item--interaction,
+  #expo .expo-gallery__item--mecha,
+  #expo .expo-gallery__item--torii,
+  #expo .expo-gallery__item--booth {
+    flex: 0 0 min(78vw, 19.5rem);
+    grid-column: auto;
+    grid-row: auto;
+    width: min(78vw, 19.5rem);
+    aspect-ratio: 4 / 3 !important;
+    min-height: 0;
+    border-radius: 1rem;
+    scroll-snap-align: start;
+  }
+
+  #expo .expo-gallery__item figcaption {
+    padding: 1.35rem 0.85rem 0.7rem;
+    border-radius: 0 0 1rem 1rem;
+  }
+
+  #expo > .section-guide {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    margin: clamp(0.75rem, 2vh, 1.1rem) auto clamp(1rem, 2.4vh, 1.5rem);
+  }
+
+  #expo > .section-guide:hover {
+    transform: translateY(2px);
+  }
+}
+
+/* Expo lightbox — full-image preview on click. */
+.expo-lightbox {
+  width: min(96vw, 1200px);
+  max-width: calc(100vw - 1.5rem);
+  max-height: min(92vh, calc(100dvh - 1.5rem));
+  margin: auto;
+  padding: 0;
+  border: 0;
+  color: #f6f6f3;
+  background: transparent;
+  overflow: visible;
+}
+
+.expo-lightbox::backdrop {
+  background: rgba(4, 5, 7, 0.88);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.expo-lightbox[open] {
+  display: grid;
+  place-items: center;
+}
+
+.expo-lightbox__stage {
+  position: relative;
+  display: grid;
+  margin: 0;
+  max-width: 100%;
+  max-height: min(86vh, calc(100dvh - 4rem));
+  overflow: hidden;
+  background: #0c0d0f;
+  box-shadow: 0 1.25rem 3.5rem rgba(0, 0, 0, 0.45);
+}
+
+.expo-lightbox__stage img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(92vw, 1100px);
+  max-height: min(78vh, calc(100dvh - 7rem));
+  object-fit: contain;
+  background: #0c0d0f;
+}
+
+.expo-lightbox__stage figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 2.5rem 1.15rem 0.95rem;
+  margin: 0;
+  color: #f6f6f3;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(4, 5, 7, 0.55) 55%,
+    rgba(4, 5, 7, 0.82) 100%
+  );
+  pointer-events: none;
+}
+
+.expo-lightbox__stage figcaption span {
+  color: var(--xolo-green-soft, #8de85d);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.expo-lightbox__stage figcaption strong {
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.expo-lightbox__close {
+  position: absolute;
+  top: -0.35rem;
+  right: -0.15rem;
+  z-index: 5;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 1.55rem;
+  line-height: 1;
+  background: rgba(8, 9, 11, 0.72);
+  cursor: pointer;
+  transform: translate(30%, -30%);
+}
+
+.expo-lightbox__close:hover {
+  background: rgba(8, 9, 11, 0.92);
+}
+
+.expo-lightbox__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 5;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(8, 9, 11, 0.55);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.expo-lightbox__nav:hover {
+  background: rgba(8, 9, 11, 0.82);
+}
+
+.expo-lightbox__nav svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.expo-lightbox__nav--prev {
+  left: clamp(-0.35rem, -1.5vw, 0.35rem);
+}
+
+.expo-lightbox__nav--next {
+  right: clamp(-0.35rem, -1.5vw, 0.35rem);
+}
+
+.expo-lightbox__close:focus-visible,
+.expo-lightbox__nav:focus-visible {
+  outline: 2px solid var(--xolo-green-soft, #8de85d);
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .expo-lightbox__nav--prev {
+    left: 0.35rem;
+  }
+
+  .expo-lightbox__nav--next {
+    right: 0.35rem;
+  }
+
+  .expo-lightbox__close {
+    top: 0.35rem;
+    right: 0.35rem;
+    transform: none;
   }
 }
