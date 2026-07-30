@@ -47,7 +47,7 @@
       fetchpriority="high"
     />
     <link rel="stylesheet" href="css/site.min.css?v=20260729cg" />
-    <link rel="stylesheet" href="css/xolome-local-overrides.css?v=20260729du" />
+    <link rel="stylesheet" href="css/xolome-local-overrides.css?v=20260730ea" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -89,8 +89,8 @@
           <a class="nav__link" href="#overview">概览</a>
           <a class="nav__link" href="#x1">THE X1</a>
           <a class="nav__link" href="#x1-companion">桌面陪伴</a>
-          <a class="nav__link" href="#expo">展会</a>
           <a class="nav__link" href="#collab">IP 联名</a>
+          <a class="nav__link" href="#expo">展会</a>
           <button
             class="button button--ghost button--nav"
             type="button"
@@ -325,50 +325,170 @@
             </div>
           </div>
 
-          <div class="x1-stage__media" aria-label="XOLOme X1 产品展示">
-            <figure class="tile tile--wide">
-              <picture>
-                <source
-                  data-lazy-srcset="assets/images/x1-overview.webp?v=20260729ci"
-                  type="image/webp"
-                />
-                <img
-                  src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                  data-lazy-src="assets/images/x1-overview.png?v=20260729ci"
-                  alt="XOLOme X1 完整外观视图"
-                  width="1920"
-                  height="1200"
-                  decoding="async"
-                />
-              </picture>
-              <figcaption>
-                <span>01</span><span>完整外观视图</span><span>XOLOme X1</span>
-              </figcaption>
-            </figure>
-            <figure class="tile tile--module">
-              <img
-                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                data-lazy-src="assets/images/x1-modules.webp"
-                alt="XOLOme X1 主机、支架与遥控器"
-                width="1920"
-                height="1200"
-                decoding="async"
-              />
-              <figcaption>
-                <span>02</span><span>X1 主机、支架与遥控器</span>
-              </figcaption>
-            </figure>
-            <figure class="tile tile--diy">
-              <img
-                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                data-lazy-src="assets/images/x1-diy.webp"
-                alt="XOLOme X1 的多种 DIY 功能"
-                width="1920"
-                height="1200"
-                decoding="async"
-              />
-              <figcaption><span>03</span><span>多种 DIY 功能</span></figcaption>
-            </figure>
+          <div
+            class="x1-stage__media"
+            data-x1-media-pager
+            aria-label="XOLOme X1 产品展示"
+          >
+            <div class="x1-stage__pages">
+              <div
+                class="x1-stage__page is-active"
+                data-x1-page
+                aria-hidden="false"
+              >
+                <figure class="tile tile--wide">
+                  <picture>
+                    <source
+                      data-lazy-srcset="assets/images/x1-overview.webp?v=20260729ci"
+                      type="image/webp"
+                    />
+                    <img
+                      src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                      data-lazy-src="assets/images/x1-overview.png?v=20260729ci"
+                      alt="XOLOme X1 完整外观视图"
+                      width="1920"
+                      height="1200"
+                      decoding="async"
+                    />
+                  </picture>
+                  <figcaption>
+                    <span>01</span><span>完整外观视图</span
+                    ><span>XOLOme X1</span>
+                  </figcaption>
+                </figure>
+                <figure class="tile tile--module">
+                  <img
+                    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                    data-lazy-src="assets/images/x1-modules.webp"
+                    alt="XOLOme X1 主机、支架与遥控器"
+                    width="1920"
+                    height="1200"
+                    decoding="async"
+                  />
+                  <figcaption>
+                    <span>02</span><span>X1 主机、支架与遥控器</span>
+                  </figcaption>
+                </figure>
+                <figure class="tile tile--diy">
+                  <img
+                    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                    data-lazy-src="assets/images/x1-diy.webp"
+                    alt="XOLOme X1 的多种 DIY 功能"
+                    width="1920"
+                    height="1200"
+                    decoding="async"
+                  />
+                  <figcaption>
+                    <span>03</span><span>多种 DIY 功能</span>
+                  </figcaption>
+                </figure>
+              </div>
+
+              <div
+                class="x1-stage__page x1-stage__page--studio"
+                data-x1-page
+                aria-hidden="true"
+              >
+                <figure class="tile tile--wide">
+                  <picture>
+                    <source
+                      data-lazy-srcset="assets/images/x1-page2-wide.webp?v=20260730ea"
+                      type="image/webp"
+                    />
+                    <img
+                      src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                      data-lazy-src="assets/images/x1-page2-wide.png?v=20260730ea"
+                      alt="XOLOme X1 主机与底座组合"
+                      width="2400"
+                      height="1350"
+                      decoding="async"
+                    />
+                  </picture>
+                  <figcaption>
+                    <span>01</span><span>主机与底座组合</span
+                    ><span>XOLOme X1</span>
+                  </figcaption>
+                </figure>
+                <figure class="tile tile--module">
+                  <picture>
+                    <source
+                      data-lazy-srcset="assets/images/x1-page2-module.webp?v=20260730ea"
+                      type="image/webp"
+                    />
+                    <img
+                      src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                      data-lazy-src="assets/images/x1-page2-module.png?v=20260730ea"
+                      alt="XOLOme X1 机身背面细节"
+                      width="836"
+                      height="1021"
+                      decoding="async"
+                    />
+                  </picture>
+                  <figcaption>
+                    <span>02</span><span>机身背面细节</span>
+                  </figcaption>
+                </figure>
+                <figure class="tile tile--diy">
+                  <picture>
+                    <source
+                      data-lazy-srcset="assets/images/x1-page2-diy.webp?v=20260730ea"
+                      type="image/webp"
+                    />
+                    <img
+                      src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                      data-lazy-src="assets/images/x1-page2-diy.png?v=20260730ea"
+                      alt="XOLOme X1 支架与传感模组"
+                      width="2400"
+                      height="1350"
+                      decoding="async"
+                    />
+                  </picture>
+                  <figcaption>
+                    <span>03</span><span>支架与传感模组</span>
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+
+            <div class="x1-stage__pager" role="group" aria-label="产品图集翻页">
+              <button
+                class="x1-stage__pager-btn"
+                type="button"
+                data-x1-page-prev
+                aria-label="上一组图集"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+              <div class="x1-stage__pager-dots" data-x1-page-dots></div>
+              <button
+                class="x1-stage__pager-btn"
+                type="button"
+                data-x1-page-next
+                aria-label="下一组图集"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
         <a
@@ -682,6 +802,132 @@
         </div>
         <a
           class="section-guide section-guide--on-light"
+          href="#collab"
+          aria-label="向下浏览：IP 联名"
+        >
+          <span class="section-guide__label">IP 联名</span>
+          <span class="section-guide__icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </span>
+        </a>
+      </section>
+
+      <section class="collab-band" id="collab" aria-labelledby="collab-title">
+        <div class="shell section-head">
+          <div>
+            <p class="kicker">05 / IP COLLECTIVE</p>
+            <h2 id="collab-title">
+              <span>IP 联名矩阵，</span>
+              <span>让场景先开口</span>
+            </h2>
+          </div>
+          <div class="section-head__aside">
+            <p class="section-head__lede">
+              IP、设备与空间被压成一条连续叙事。角色不只出现在屏幕上，也会被换壳、被收藏、被放进真实桌面。
+            </p>
+          </div>
+        </div>
+
+        <div class="shell collab-stage">
+          <div class="collab-stage__copy">
+            <div>
+              <p class="kicker kicker--green">Stories have a new home</p>
+              <p class="collab-stage__text">
+                2026 年 5 月香港文博会，XOLOme
+                发布长安卫、民族娃娃等国风 IP
+                矩阵。它们不是贴在设备上的装饰，而是连接情绪、文化与日常的纽带。
+              </p>
+            </div>
+          </div>
+          <div
+            class="collab-stage__media"
+            id="collab-showcase"
+            data-scroll-align="media"
+          >
+            <video
+              class="collab-stage__video"
+              data-lazy-video
+              data-src="assets/video/changanwei-collab.mp4"
+              poster="assets/images/changanwei-poster.webp"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="none"
+              aria-label="长安卫与 XOLOme 的 IP 合作视频"
+            ></video>
+            <div class="collab-stage__wash" aria-hidden="true"></div>
+            <div class="collab-stage__caption">
+              <span>长安卫 × XOLOme</span>
+              <span>IP 合作视频</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="shell collab-band__footer">
+          <div class="collab-band__notes" aria-label="IP 合作方向">
+            <span>长安卫</span>
+            <span>民族娃娃</span>
+            <span>先祖效应</span>
+          </div>
+        </div>
+
+        <a
+          class="section-guide section-guide--on-dark"
+          href="#feature"
+          aria-label="向下浏览：产品影像"
+        >
+          <span class="section-guide__label">影像</span>
+          <span class="section-guide__icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </span>
+        </a>
+      </section>
+
+      <section class="feature-reel" id="feature" aria-label="XOLOme 产品影像">
+        <div class="feature-reel__stage">
+          <img
+            class="feature-reel__poster"
+            src="assets/images/x1-feature-poster.webp"
+            alt=""
+            width="1920"
+            height="1080"
+            decoding="async"
+            aria-hidden="true"
+          />
+          <video
+            class="feature-reel__video"
+            data-lazy-video
+            data-src="assets/video/x1-feature.mp4"
+            poster="assets/images/x1-feature-poster.webp"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="none"
+            aria-label="XOLOme 产品影像"
+          ></video>
+        </div>
+        <a
+          class="section-guide section-guide--on-dark"
           href="#expo"
           aria-label="向下浏览：展会照片墙"
         >
@@ -814,152 +1060,6 @@
             </figure>
           </div>
         </div>
-
-        <a
-          class="section-guide section-guide--on-photo"
-          href="#collab"
-          aria-label="向下浏览：IP 联名"
-        >
-          <span class="section-guide__label">IP 联名</span>
-          <span class="section-guide__icon" aria-hidden="true">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M6 9l6 6 6-6" />
-            </svg>
-          </span>
-        </a>
-      </section>
-
-      <section class="collab-band" id="collab" aria-labelledby="collab-title">
-        <div class="shell section-head">
-          <div>
-            <p class="kicker">05 / IP COLLECTIVE</p>
-            <h2 id="collab-title">
-              <span>IP 联名矩阵，</span>
-              <span>让场景先开口</span>
-            </h2>
-          </div>
-          <div class="section-head__aside">
-            <p class="section-head__lede">
-              IP、设备与空间被压成一条连续叙事。角色不只出现在屏幕上，也会被换壳、被收藏、被放进真实桌面。
-            </p>
-          </div>
-        </div>
-
-        <div class="shell collab-stage">
-          <div class="collab-stage__copy">
-            <div>
-              <p class="kicker kicker--green">Stories have a new home</p>
-              <p class="collab-stage__text">
-                2026 年 5 月香港文博会，XOLOme
-                发布长安卫、民族娃娃等国风 IP
-                矩阵。它们不是贴在设备上的装饰，而是连接情绪、文化与日常的纽带。
-              </p>
-            </div>
-          </div>
-          <div
-            class="collab-stage__media"
-            id="collab-showcase"
-            data-scroll-align="media"
-          >
-            <video
-              class="collab-stage__video"
-              data-lazy-video
-              data-src="assets/video/changanwei-collab.mp4"
-              poster="assets/images/changanwei-poster.webp"
-              autoplay
-              muted
-              loop
-              playsinline
-              preload="none"
-              aria-label="长安卫与 XOLOme 的 IP 合作视频"
-            ></video>
-            <div class="collab-stage__wash" aria-hidden="true"></div>
-            <div class="collab-stage__caption">
-              <span>长安卫 × XOLOme</span>
-              <span>IP 合作视频</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="shell collab-band__footer">
-          <div class="collab-band__notes" aria-label="IP 合作方向">
-            <span>长安卫</span>
-            <span>民族娃娃</span>
-            <span>先祖效应</span>
-          </div>
-        </div>
-
-        <a
-          class="section-guide section-guide--on-dark"
-          href="#feature"
-          aria-label="向下浏览：产品影像"
-        >
-          <span class="section-guide__label">影像</span>
-          <span class="section-guide__icon" aria-hidden="true">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M6 9l6 6 6-6" />
-            </svg>
-          </span>
-        </a>
-      </section>
-
-      <section class="feature-reel" id="feature" aria-label="XOLOme 产品影像">
-        <div class="feature-reel__stage">
-          <img
-            class="feature-reel__poster"
-            src="assets/images/x1-feature-poster.webp"
-            alt=""
-            width="1920"
-            height="1080"
-            decoding="async"
-            aria-hidden="true"
-          />
-          <video
-            class="feature-reel__video"
-            data-lazy-video
-            data-src="assets/video/x1-feature.mp4"
-            poster="assets/images/x1-feature-poster.webp"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="none"
-            aria-label="XOLOme 产品影像"
-          ></video>
-        </div>
-        <a
-          class="section-guide section-guide--on-dark"
-          href="#contact"
-          aria-label="向下浏览：联系我们"
-        >
-          <span class="section-guide__label">联系我们</span>
-          <span class="section-guide__icon" aria-hidden="true">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M6 9l6 6 6-6" />
-            </svg>
-          </span>
-        </a>
       </section>
 
       <section
@@ -1113,6 +1213,6 @@
       </figure>
     </dialog>
 
-    <script src="js/app.js?v=20260729df"></script>
+    <script src="js/app.js?v=20260730ea"></script>
   </body>
 </html>

@@ -16,6 +16,7 @@
   --xo-head-margin-bottom: clamp(0.85rem, 2vh, 1.35rem);
   --xo-guide-margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
   --xo-shell-max: 1520px;
+  --xo-shell-gap: clamp(1rem, 2.4vw, 1.5rem);
 }
 
 .button--primary {
@@ -1970,6 +1971,49 @@ header.masthead.menu-open .nav-toggle {
   line-height: 1.75;
 }
 
+/* THE X1 media: pageable 3-tile mosaic. */
+#x1 .x1-stage__media {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+#x1 .x1-stage__pages {
+  position: relative;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+#x1 .x1-stage__page {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "wide wide"
+    "module diy";
+  width: 100%;
+  min-width: 0;
+  transition:
+    opacity 0.45s ease,
+    visibility 0.45s ease;
+}
+
+#x1 .x1-stage__page:not(.is-active) {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#x1 .x1-stage__page.is-active {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
 .x1-stage__media .tile--module,
 .x1-stage__media .tile--diy {
   aspect-ratio: 16 / 10;
@@ -1996,9 +2040,104 @@ header.masthead.menu-open .nav-toggle {
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Studio renders (page 2) — transparent PNG cutouts on the same dark tile ground. */
+.x1-stage__page--studio .tile {
+  background: #090b0e;
+}
+
+.x1-stage__page--studio .tile img {
+  mix-blend-mode: normal;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+}
+
+.x1-stage__page--studio .tile--module img {
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+}
+
 .x1-stage__media .tile {
   overflow: hidden;
   background: #090b0e;
+}
+
+.x1-stage__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  flex: 0 0 auto;
+  padding: 0.15rem 0 0.1rem;
+}
+
+.x1-stage__pager-btn {
+  display: grid;
+  place-items: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: rgba(246, 246, 240, 0.78);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.x1-stage__pager-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.x1-stage__pager-btn:hover,
+.x1-stage__pager-btn:focus-visible {
+  border-color: rgba(var(--xolo-green-rgb, 110, 199, 59), 0.65);
+  color: var(--xolo-green-soft, #8de85d);
+  background: rgba(var(--xolo-green-rgb, 110, 199, 59), 0.12);
+  outline: none;
+}
+
+.x1-stage__pager-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.x1-stage__pager-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.x1-stage__pager-dot.is-active {
+  background: var(--xolo-green, #6ec73b);
+  transform: scale(1.2);
+}
+
+.x1-stage__pager-dot:hover,
+.x1-stage__pager-dot:focus-visible {
+  background: rgba(141, 232, 93, 0.85);
+  outline: none;
+}
+
+@media (max-width: 960px) {
+  #x1 .x1-stage__media {
+    gap: 0.65rem;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -2048,7 +2187,8 @@ header.masthead.menu-open .nav-toggle {
    Force single column — site.min still expects a removed .hero-rail. */
 .hero__content {
   grid-template-columns: minmax(0, 1fr);
-  max-width: min(40rem, 100%);
+  width: 100%;
+  max-width: none;
 }
 
 @media (orientation: landscape) and (max-height: 500px) and (min-width: 560px) and (max-width: 960px) {
@@ -2965,15 +3105,15 @@ html.has-reveal-motion .section-guide {
 }
 
 #expo > .section-guide {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(0.85rem, 2vh, 1.4rem);
+  position: relative;
+  left: auto;
+  bottom: auto;
   z-index: 6;
   flex: 0 0 auto;
   flex-direction: column;
   gap: 0.35rem;
-  margin: 0;
-  transform: translateX(-50%);
+  margin: clamp(0.85rem, 2vh, 1.35rem) auto clamp(1rem, 2.4vh, 1.5rem);
+  transform: none;
 }
 
 #expo > .section-guide::before {
@@ -2984,7 +3124,7 @@ html.has-reveal-motion .section-guide {
 }
 
 #expo > .section-guide:hover {
-  transform: translateX(-50%) translateY(2px);
+  transform: translateY(2px);
 }
 
 @media (max-width: 960px) {
@@ -3068,18 +3208,6 @@ html.has-reveal-motion .section-guide {
   #expo .expo-gallery__item--mecha {
     grid-column: 3;
     grid-row: 2;
-  }
-
-  #expo > .section-guide {
-    position: absolute;
-    left: 50%;
-    bottom: clamp(0.85rem, 2vh, 1.4rem);
-    transform: translateX(-50%);
-    margin: 0;
-  }
-
-  #expo > .section-guide:hover {
-    transform: translateX(-50%) translateY(2px);
   }
 }
 
@@ -3166,18 +3294,6 @@ html.has-reveal-motion .section-guide {
   #expo .expo-gallery__item figcaption {
     padding: 1.35rem 0.85rem 0.7rem;
     border-radius: 0 0 1rem 1rem;
-  }
-
-  #expo > .section-guide {
-    position: relative;
-    left: auto;
-    bottom: auto;
-    transform: none;
-    margin: clamp(0.75rem, 2vh, 1.1rem) auto clamp(1rem, 2.4vh, 1.5rem);
-  }
-
-  #expo > .section-guide:hover {
-    transform: translateY(2px);
   }
 }
 
@@ -3340,5 +3456,87 @@ html.has-reveal-motion .section-guide {
     top: 0.35rem;
     right: 0.35rem;
     transform: none;
+  }
+}
+
+/* Desktop layout repairs — keep each page frame full-width and one-screen tall. */
+@media (min-width: 961px) {
+  .shell:not(.hero__stage):not(.masthead__inner) {
+    width: min(
+      calc(100% - var(--xo-shell-gap) * 2),
+      var(--xo-shell-max)
+    );
+    margin-inline: auto;
+  }
+
+  .hero {
+    min-height: 100dvh;
+    padding: 0;
+    background: #040303;
+  }
+
+  .hero .hero__stage {
+    width: 100%;
+    max-width: none;
+    min-height: 100dvh;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .hero__content {
+    grid-template-columns: minmax(0, 1fr) !important;
+    padding-inline: max(
+      var(--xo-shell-gap),
+      calc((100vw - var(--xo-shell-max)) / 2 + var(--xo-shell-gap))
+    );
+  }
+
+  #overview.intro-band {
+    justify-content: flex-start;
+    padding-top: clamp(1.75rem, 4.5vh, 3rem);
+  }
+
+  #overview .intro-band__inner {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: calc(var(--xo-section-min-height) - 5.5rem);
+    align-items: center;
+    padding-top: clamp(0.85rem, 2.2vh, 1.65rem);
+  }
+
+  .ip-shells__viewport {
+    min-height: clamp(18rem, 50vh, 36rem);
+    max-height: calc(var(--xo-section-min-height) - 9.5rem);
+  }
+
+  .ip-shells__slide img {
+    max-width: min(100%, 50rem);
+    max-height: min(40rem, calc(var(--xo-section-min-height) - 10.5rem));
+  }
+
+  .ip-shells__slide.is-active img {
+    transform: scale(1.1);
+  }
+
+  .x1-band > .shell.x1-stage {
+    flex: 0 0 auto;
+    min-height: auto;
+    align-content: start;
+    align-items: start;
+  }
+
+  #x1 {
+    min-height: auto;
+    padding-bottom: 0;
+  }
+
+  #x1 .x1-stage__media {
+    height: auto;
+    max-height: none;
+  }
+
+  #x1 .x1-stage__pages {
+    overflow: visible;
   }
 }

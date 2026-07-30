@@ -335,7 +335,7 @@ function initSectionReveals() {
     [".intro-band__rail", "media", 120],
     [".x1-band > .section-head", "copy", 0],
     [".x1-stage__copy", "copy", 80],
-    [".x1-stage__media .tile", "media", 0],
+    [".x1-stage__media", "media", 0],
     [".x1-companion__copy", "copy", 0],
     [".x1-companion__shot", "media", 80],
     [".collab-band > .section-head", "copy", 0],
@@ -705,6 +705,7 @@ initLazyVideos();
 initCompanionGallery();
 initIpShells();
 initExpoLightbox();
+initX1MediaPager();
 
 if (reduceMotion) {
   document.querySelectorAll("video").forEach((video) => {
@@ -714,6 +715,102 @@ if (reduceMotion) {
 }
 
 initSectionReveals();
+
+function initX1MediaPager() {
+  const root = document.querySelector("[data-x1-media-pager]");
+  if (!root) {
+    return;
+  }
+
+  const pages = Array.from(root.querySelectorAll("[data-x1-page]"));
+  const prevBtn = root.querySelector("[data-x1-page-prev]");
+  const nextBtn = root.querySelector("[data-x1-page-next]");
+  const dotsWrap = root.querySelector("[data-x1-page-dots]");
+  if (pages.length < 2 || !prevBtn || !nextBtn || !dotsWrap) {
+    return;
+  }
+
+  let index = 0;
+  const count = pages.length;
+
+  const hydratePage = (page) => {
+    page
+      .querySelectorAll("img[data-lazy-src], source[data-lazy-srcset]")
+      .forEach((el) => {
+        hydrateLazyImage(el);
+      });
+  };
+
+  dotsWrap.innerHTML = pages
+    .map(
+      (_, i) =>
+        `<button type="button" class="x1-stage__pager-dot${
+          i === 0 ? " is-active" : ""
+        }" data-x1-page-dot="${i}" aria-label="图集 ${i + 1}" aria-selected="${
+          i === 0 ? "true" : "false"
+        }"></button>`,
+    )
+    .join("");
+
+  const dots = Array.from(dotsWrap.querySelectorAll("[data-x1-page-dot]"));
+
+  const render = () => {
+    pages.forEach((page, i) => {
+      const active = i === index;
+      page.classList.toggle("is-active", active);
+      page.setAttribute("aria-hidden", active ? "false" : "true");
+      if (active) {
+        hydratePage(page);
+      }
+    });
+    dots.forEach((dot, i) => {
+      const active = i === index;
+      dot.classList.toggle("is-active", active);
+      dot.setAttribute("aria-selected", active ? "true" : "false");
+    });
+  };
+
+  const goTo = (next) => {
+    index = ((next % count) + count) % count;
+    render();
+  };
+
+  prevBtn.addEventListener("click", () => goTo(index - 1));
+  nextBtn.addEventListener("click", () => goTo(index + 1));
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => {
+      goTo(Number(dot.dataset.x1PageDot));
+    });
+  });
+
+  root.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      goTo(index - 1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      goTo(index + 1);
+    }
+  });
+
+  if ("IntersectionObserver" in window) {
+    const warm = new IntersectionObserver(
+      (entries, obs) => {
+        if (!entries.some((entry) => entry.isIntersecting)) {
+          return;
+        }
+        pages.forEach(hydratePage);
+        obs.disconnect();
+      },
+      { rootMargin: "180px 0px", threshold: 0.01 },
+    );
+    warm.observe(root);
+  } else {
+    pages.forEach(hydratePage);
+  }
+
+  render();
+}
 
 function initExpoLightbox() {
   const dialog = document.querySelector("[data-expo-lightbox]");
