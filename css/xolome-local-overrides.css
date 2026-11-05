@@ -524,10 +524,10 @@ header.masthead
 }
 
 .contact-modal__content img {
-  width: min(11.5rem, 72%);
+  width: min(12.5rem, 74%);
   height: auto;
   max-height: min(42vh, calc(var(--xo-live-viewport, 100dvh) * 0.42));
-  aspect-ratio: 888 / 1131;
+  aspect-ratio: 1 / 1;
   margin: 0 auto 1rem;
   object-fit: contain;
 }
@@ -943,14 +943,17 @@ header.masthead.menu-open .nav-toggle {
 .about-stage__aside {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
+  align-self: center;
   gap: 0;
   min-width: 0;
   min-height: 0;
-  height: 100%;
-  padding: 0 0 clamp(0.35rem, 1.2vh, 0.85rem);
+  height: auto;
+  max-height: none;
+  padding: 0;
   border-left: 0;
+  overflow: visible;
 }
 
 .about-stage__character {
@@ -959,7 +962,8 @@ header.masthead.menu-open .nav-toggle {
   width: 100%;
   max-width: min(100%, 28rem);
   margin: 0;
-  padding: 0;
+  /* Room under soles so stage/band edges never clip boots. */
+  padding: 0.35rem 0 1.75rem;
   overflow: visible;
 }
 
@@ -967,7 +971,7 @@ header.masthead.menu-open .nav-toggle {
   display: block;
   width: min(100%, 26rem);
   height: auto;
-  max-height: min(38rem, 74vh);
+  max-height: none;
   margin-inline: auto;
   object-fit: contain;
   object-position: center bottom;
@@ -979,41 +983,56 @@ header.masthead.menu-open .nav-toggle {
 
 @media (hover: hover) and (pointer: fine) {
   .about-stage__character:hover img {
-    transform: scale(1.045);
+    transform: none;
   }
 }
 
 @media (max-width: 960px) {
   .about-stage__aside {
     align-items: center;
-    justify-content: flex-end;
-    min-height: clamp(16rem, 48vw, 24rem);
+    justify-content: center;
+    min-height: 0;
+    height: auto;
     padding-bottom: 0;
+    overflow: visible;
   }
 
   .about-stage__character {
     max-width: min(100%, 20rem);
+    overflow: visible;
+    padding-bottom: 1.5rem;
   }
 
   .about-stage__character img {
     width: min(100%, 18.5rem);
-    max-height: min(26rem, 52vh);
+    max-height: none;
+    height: auto;
+    object-fit: contain;
+    object-position: center bottom;
   }
 }
 
 @media (max-width: 760px) {
   .about-stage__aside {
     min-height: 0;
+    height: auto;
     padding-top: clamp(0.35rem, 1.5vh, 0.75rem);
+    overflow: visible;
   }
 
   .about-stage__character {
-    max-width: min(100%, 15.5rem);
+    max-width: min(100%, 17rem);
+    overflow: visible;
+    padding-bottom: 1.35rem;
   }
 
+  /* Sitting character only: keep full boot soles in frame. */
   .about-stage__character img {
-    width: min(100%, 14.5rem);
-    max-height: min(20rem, 46vh);
+    width: min(100%, 16rem);
+    max-height: none;
+    height: auto;
+    object-fit: contain;
+    object-position: center bottom;
   }
 }
 
@@ -1950,6 +1969,13 @@ header.masthead.menu-open .nav-toggle {
   overflow: visible;
 }
 
+#about.about-band,
+#about .about-stage,
+#about .about-stage__aside,
+#about .about-stage__character {
+  overflow: visible;
+}
+
 @media (min-width: 961px) {
   .x1-stage {
     align-items: start;
@@ -2265,7 +2291,7 @@ header.masthead.menu-open .nav-toggle {
   }
 
   .about-stage__character:hover img {
-    transform: scale(1.045);
+    transform: none;
   }
 
   .contact-band__media:hover img {
@@ -2754,10 +2780,10 @@ html.has-reveal-motion .section-guide {
 
 .ip-shells__slide img {
   width: auto;
-  max-width: min(100%, 44rem);
+  max-width: min(100%, 46rem);
   height: auto;
-  max-height: min(46rem, 82vh);
-  aspect-ratio: 920 / 1120;
+  max-height: min(46rem, 84vh);
+  aspect-ratio: auto;
   object-fit: contain;
   object-position: center bottom;
   transform: scale(1);
@@ -2765,6 +2791,27 @@ html.has-reveal-motion .section-guide {
   transition:
     transform 0.55s cubic-bezier(0.22, 0.82, 0.2, 1),
     opacity 0.45s ease;
+}
+
+/* Cover product only — never scale inside overflow:hidden (clips green base). */
+.ip-shells__slide:first-child {
+  place-items: center;
+  align-content: center;
+  padding: 0.55rem 0.35rem 1rem;
+  box-sizing: border-box;
+}
+
+.ip-shells__slide:first-child img,
+.ip-shells__slide:first-child.is-active img {
+  transform: none;
+  transform-origin: center center;
+  width: auto;
+  max-width: min(100%, 44rem);
+  height: auto;
+  max-height: min(44rem, 82vh);
+  aspect-ratio: auto;
+  object-fit: contain;
+  object-position: center center;
 }
 
 /* All five slides share the same scale / anchor — cover keeps soft shadow only. */
@@ -2777,7 +2824,8 @@ html.has-reveal-motion .section-guide {
 }
 
 .ip-shells__slide.is-active img {
-  transform: scale(1.06);
+  /* Light presence only — between original and previous bump. */
+  transform: scale(1.04);
   opacity: 1;
 }
 
@@ -2825,6 +2873,28 @@ html.has-reveal-motion .section-guide {
   .ip-shells__viewport {
     min-height: clamp(20rem, 48vh, 28rem);
   }
+
+  /* Mobile: no active zoom — scale was clipping shell bases in overflow:hidden. */
+  .ip-shells__slide.is-active img {
+    transform: none;
+  }
+
+  /* Cover product only on tablet widths. */
+  .ip-shells__slide:first-child {
+    place-items: center;
+    padding: 0.45rem 0.25rem 0.75rem;
+    box-sizing: border-box;
+  }
+
+  .ip-shells__slide:first-child img,
+  .ip-shells__slide:first-child.is-active img {
+    transform: none;
+    max-width: min(100%, 21rem);
+    max-height: min(27rem, 54vh);
+    aspect-ratio: auto;
+    object-fit: contain;
+    object-position: center center;
+  }
 }
 
 @media (max-width: 760px) {
@@ -2833,8 +2903,27 @@ html.has-reveal-motion .section-guide {
   }
 
   .ip-shells__slide img {
-    max-width: min(100%, 22rem);
-    max-height: min(26rem, 52vh);
+    max-width: min(100%, 23rem);
+    max-height: min(27rem, 54vh);
+  }
+
+  /* Cover product only: active scale + overflow:hidden was clipping the kiosk. */
+  .ip-shells__slide:first-child {
+    place-items: center;
+    padding: 0.55rem 0.35rem 0.85rem;
+    box-sizing: border-box;
+  }
+
+  .ip-shells__slide:first-child img,
+  .ip-shells__slide:first-child.is-active img {
+    transform: none;
+    width: auto;
+    max-width: min(100%, 19.5rem);
+    height: auto;
+    max-height: min(24rem, 52vh);
+    aspect-ratio: auto;
+    object-fit: contain;
+    object-position: center center;
   }
 }
 
@@ -3511,12 +3600,17 @@ html.has-reveal-motion .section-guide {
   }
 
   .ip-shells__slide img {
-    max-width: min(100%, 50rem);
-    max-height: min(40rem, calc(var(--xo-section-min-height) - 10.5rem));
+    max-width: min(100%, 48rem);
+    max-height: min(40rem, calc(var(--xo-section-min-height) - 10rem));
   }
 
   .ip-shells__slide.is-active img {
-    transform: scale(1.1);
+    transform: scale(1.06);
+  }
+
+  .ip-shells__slide:first-child img,
+  .ip-shells__slide:first-child.is-active img {
+    transform: none;
   }
 
   .x1-band > .shell.x1-stage {

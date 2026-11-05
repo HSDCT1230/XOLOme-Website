@@ -597,7 +597,7 @@ function initLazyImages() {
     return;
   }
 
-  // Keep first paint free: only fetch when nearly on screen (native lazy is too eager on mobile).
+  // Warm near-fold images earlier so the first scroll feels instant.
   const observer = new IntersectionObserver(
     (entries, obs) => {
       entries.forEach((entry) => {
@@ -608,31 +608,100 @@ function initLazyImages() {
         obs.unobserve(entry.target);
       });
     },
-    { rootMargin: "80px 0px", threshold: 0.01 },
+    { rootMargin: "720px 0px", threshold: 0.01 },
   );
 
   nodes.forEach((el) => observer.observe(el));
+
+  const warmIdleImages = () => {
+    const pending = document.querySelectorAll(
+      "img[data-lazy-src], source[data-lazy-srcset]",
+    );
+    let budget = 6;
+    pending.forEach((el) => {
+      if (budget <= 0) {
+        return;
+      }
+      const picture = el.closest("picture");
+      const img = picture
+        ? picture.querySelector("img[data-lazy-src], img[data-lazy-srcset]")
+        : el.tagName === "IMG"
+          ? el
+          : null;
+      if (!img || img.dataset.lazyLoaded === "1") {
+        return;
+      }
+      const rect = (picture || img).getBoundingClientRect();
+      if (rect.top > window.innerHeight * 2.4) {
+        return;
+      }
+      reveal(img);
+      budget -= 1;
+    });
+  };
+
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(warmIdleImages, { timeout: 1800 });
+  } else {
+    window.setTimeout(warmIdleImages, 900);
+  }
+}
+
+function playWhenReady(video) {
+  if (reduceMotion || !video.autoplay) {
+    return;
+  }
+
+  video.muted = true;
+  video.defaultMuted = true;
+  video.playsInline = true;
+  video.setAttribute("muted", "");
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "");
+  video.setAttribute("x5-playsinline", "");
+  video.setAttribute("x5-video-player-type", "h5-page");
+
+  let attempts = 0;
+  const kick = () => {
+    if (reduceMotion || attempts > 6) {
+      return;
+    }
+    attempts += 1;
+    const playAttempt = video.play();
+    if (playAttempt && typeof playAttempt.catch === "function") {
+      playAttempt.catch(() => {});
+    }
+  };
+
+  if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+    kick();
+  } else {
+    video.addEventListener("loadeddata", kick, { once: true });
+    video.addEventListener("canplay", kick, { once: true });
+  }
 }
 
 function loadLazyVideo(video) {
   const src = video.dataset.src;
-  if (!src || video.src) {
+  if (!src) {
     return;
-  }
-  video.src = src;
-  video.load();
-  if (video.autoplay && !reduceMotion) {
-    video.play().catch(() => {});
   }
 
   const poster = video.parentElement?.querySelector(
     ".hero__poster, .feature-reel__poster",
   );
-  if (poster) {
+  if (poster && poster.dataset.posterWatch !== "1") {
+    poster.dataset.posterWatch = "1";
     const hidePoster = () => poster.classList.add("is-hidden");
     video.addEventListener("playing", hidePoster, { once: true });
-    window.setTimeout(hidePoster, 2400);
   }
+
+  if (!video.src) {
+    video.src = src;
+    video.load();
+  }
+
+  playWhenReady(video);
 }
 
 function initLazyVideos() {
@@ -666,15 +735,15 @@ function initLazyVideos() {
           obs.unobserve(entry.target);
         });
       },
-      { threshold: 0.2, rootMargin },
+      { threshold: 0.08, rootMargin },
     );
     list.forEach((video) => observer.observe(video));
   };
 
-  // Below-fold videos: modest lookahead only.
-  observeVideos(immediate, "120px 0px");
+  // Below-fold videos: start downloading well before they enter view.
+  observeVideos(immediate, "640px 0px");
 
-  // Hero video: wait for idle / first gesture so poster + logo win the first network slots.
+  // Hero video: give poster a short head start, then start the stream.
   deferred.forEach((video) => {
     let armed = false;
     const arm = () => {
@@ -693,10 +762,21 @@ function initLazyVideos() {
     window.addEventListener("pointerdown", arm, { passive: true, once: true });
 
     if ("requestIdleCallback" in window) {
-      window.requestIdleCallback(arm, { timeout: 2800 });
+      window.requestIdleCallback(arm, { timeout: 700 });
     } else {
-      window.setTimeout(arm, 2200);
+      window.setTimeout(arm, 450);
     }
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      return;
+    }
+    videos.forEach((video) => {
+      if (video.src && video.autoplay) {
+        playWhenReady(video);
+      }
+    });
   });
 }
 
@@ -793,16 +873,29 @@ function initX1MediaPager() {
     }
   });
 
+  const prefetchInactivePages = () => {
+    pages.forEach((page, i) => {
+      if (i !== index) {
+        hydratePage(page);
+      }
+    });
+  };
+
   if ("IntersectionObserver" in window) {
     const warm = new IntersectionObserver(
       (entries, obs) => {
         if (!entries.some((entry) => entry.isIntersecting)) {
           return;
         }
-        pages.forEach(hydratePage);
+        hydratePage(pages[index]);
+        if ("requestIdleCallback" in window) {
+          requestIdleCallback(prefetchInactivePages, { timeout: 3000 });
+        } else {
+          window.setTimeout(prefetchInactivePages, 600);
+        }
         obs.disconnect();
       },
-      { rootMargin: "180px 0px", threshold: 0.01 },
+      { rootMargin: "280px 0px", threshold: 0.01 },
     );
     warm.observe(root);
   } else {
