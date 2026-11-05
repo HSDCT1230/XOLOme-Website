@@ -26,7 +26,7 @@ XOLOme 响应式品牌官网（静态站点），支持桌面端与移动端。
 - `.github/workflows/deploy-pages.yml` → 推送 `main` 部署到 **Cloudflare Pages**（需 Secret `CLOUDFLARE_API_TOKEN`）
 - `.github/workflows/github-pages.yml` → 推送 `main` 部署到 **GitHub Pages** 备用站
 
-首次启用 GitHub Pages：仓库 **Settings → Pages → Build and deployment → Source** 选 **GitHub Actions**。
+首次启用 GitHub Pages：仓库 **Settings → Pages → Build and deployment → Source** 选 **Deploy from a branch**，Branch 选 **`gh-pages` / `/ (root)`**。之后推送 `main` 会由 Actions 自动更新 `gh-pages`。
 
 在仓库 Secrets 配置 Cloudflare（仅 Cloudflare 工作流需要）：
 
