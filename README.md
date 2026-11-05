@@ -4,12 +4,15 @@ XOLOme 响应式品牌官网（静态站点），支持桌面端与移动端。
 
 ## 线上地址
 
-| 环境              | 地址                                   |
-| ----------------- | -------------------------------------- |
-| 正式站            | https://xueying.xolome.com/            |
+| 环境 | 地址 |
+| --- | --- |
+| 正式站（阿里云，可能停机） | https://xueying.xolome.com/ |
 | Cloudflare 预览站 | https://xolome-website-test.pages.dev/ |
+| GitHub Pages 备用 | https://hsdct1230.github.io/XOLOme-Website/ |
 
 正式站部署、SSH、权限等本机私有说明见根目录 `XOLOme 官网运维手册.md`（含凭据，已加入 `.gitignore`，不要提交）。
+
+仓库：https://github.com/HSDCT1230/XOLOme-Website
 
 ## Cloudflare Pages
 
@@ -20,9 +23,12 @@ XOLOme 响应式品牌官网（静态站点），支持桌面端与移动端。
 
 ### GitHub Actions
 
-仓库含 `.github/workflows/deploy-pages.yml`。推送 `main` 可部署到 Cloudflare Pages。
+- `.github/workflows/deploy-pages.yml` → 推送 `main` 部署到 **Cloudflare Pages**（需 Secret `CLOUDFLARE_API_TOKEN`）
+- `.github/workflows/github-pages.yml` → 推送 `main` 部署到 **GitHub Pages** 备用站
 
-在仓库 Secrets 配置：
+首次启用 GitHub Pages：仓库 **Settings → Pages → Build and deployment → Source** 选 **GitHub Actions**。
+
+在仓库 Secrets 配置 Cloudflare（仅 Cloudflare 工作流需要）：
 
 1. 创建 [Cloudflare API Token](https://dash.cloudflare.com/profile/api-tokens)（至少 **Account → Cloudflare Pages → Edit**）
 2. GitHub → Settings → Secrets and variables → Actions
