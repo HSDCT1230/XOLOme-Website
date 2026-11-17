@@ -2793,11 +2793,11 @@ html.has-reveal-motion .section-guide {
     opacity 0.45s ease;
 }
 
-/* Cover product only — never scale inside overflow:hidden (clips green base). */
+/* Cover product only — fit full kiosk (top bezel + green base) inside viewport. */
 .ip-shells__slide:first-child {
   place-items: center;
   align-content: center;
-  padding: 0.55rem 0.35rem 1rem;
+  padding: 1.15rem 0.35rem 1.25rem;
   box-sizing: border-box;
 }
 
@@ -2806,9 +2806,15 @@ html.has-reveal-motion .section-guide {
   transform: none;
   transform-origin: center center;
   width: auto;
-  max-width: min(100%, 44rem);
+  max-width: min(100%, 40rem);
   height: auto;
-  max-height: min(44rem, 82vh);
+  /* Leave room for sticky header + dots so the top bezel is never clipped. */
+  max-height: min(
+    38rem,
+    calc(
+      var(--xo-live-viewport, 100dvh) - var(--xo-header-height) - 9.5rem
+    )
+  );
   aspect-ratio: auto;
   object-fit: contain;
   object-position: center center;
@@ -2882,15 +2888,18 @@ html.has-reveal-motion .section-guide {
   /* Cover product only on tablet widths. */
   .ip-shells__slide:first-child {
     place-items: center;
-    padding: 0.45rem 0.25rem 0.75rem;
+    padding: 0.85rem 0.25rem 0.9rem;
     box-sizing: border-box;
   }
 
   .ip-shells__slide:first-child img,
   .ip-shells__slide:first-child.is-active img {
     transform: none;
-    max-width: min(100%, 21rem);
-    max-height: min(27rem, 54vh);
+    max-width: min(100%, 19.5rem);
+    max-height: min(
+      24rem,
+      calc(var(--xo-live-viewport, 100dvh) - var(--xo-header-height) - 14rem)
+    );
     aspect-ratio: auto;
     object-fit: contain;
     object-position: center center;
@@ -2907,10 +2916,10 @@ html.has-reveal-motion .section-guide {
     max-height: min(27rem, 54vh);
   }
 
-  /* Cover product only: active scale + overflow:hidden was clipping the kiosk. */
+  /* Cover product only: keep top bezel + green base fully in frame. */
   .ip-shells__slide:first-child {
     place-items: center;
-    padding: 0.55rem 0.35rem 0.85rem;
+    padding: 0.75rem 0.35rem 0.95rem;
     box-sizing: border-box;
   }
 
@@ -2918,9 +2927,12 @@ html.has-reveal-motion .section-guide {
   .ip-shells__slide:first-child.is-active img {
     transform: none;
     width: auto;
-    max-width: min(100%, 19.5rem);
+    max-width: min(100%, 17.5rem);
     height: auto;
-    max-height: min(24rem, 52vh);
+    max-height: min(
+      22rem,
+      calc(var(--xo-live-viewport, 100dvh) - var(--xo-header-height) - 15rem)
+    );
     aspect-ratio: auto;
     object-fit: contain;
     object-position: center center;
@@ -3605,12 +3617,16 @@ html.has-reveal-motion .section-guide {
   }
 
   .ip-shells__slide.is-active img {
-    transform: scale(1.06);
+    transform: scale(1.03);
   }
 
   .ip-shells__slide:first-child img,
   .ip-shells__slide:first-child.is-active img {
     transform: none;
+    max-height: min(
+      36rem,
+      calc(var(--xo-live-viewport, 100dvh) - var(--xo-header-height) - 10rem)
+    );
   }
 
   .x1-band > .shell.x1-stage {
